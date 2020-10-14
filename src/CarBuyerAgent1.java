@@ -1,5 +1,7 @@
 import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.TickerBehaviour;
+import jade.core.behaviours.WakerBehaviour;
 
 public class CarBuyerAgent1 extends Agent {
     // The title of the book to buy
@@ -24,6 +26,19 @@ public class CarBuyerAgent1 extends Agent {
             doDelete();
         }
 
+        addBehaviour(new TickerBehaviour(this, 1000) {
+            @Override
+            protected void onTick() {
+                System.out.println("Agent " + myAgent.getLocalName() + ": tick=" + getTickCount());
+            }
+        });
+
+        addBehaviour(new WakerBehaviour(this, 10000) {
+            protected void handleElapsedTimeout(){
+                System.out.println("Agent " + myAgent.getLocalName() + ": It's wakeup-time. Bye...");
+                myAgent.doDelete();
+            }
+        });
     }
 
     // Put agent clean-up operations here
