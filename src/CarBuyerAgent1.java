@@ -40,6 +40,15 @@ public class CarBuyerAgent1 extends Agent {
             }
         });
 
+        /*
+        // Uruchamia sie po wskazanym czasie
+        addBehaviour(new WakerBehaviour(this, 10000) {
+            protected void handleElapsedTimeout() {
+                // perform operation X
+            }
+        } );
+        */
+
         addBehaviour(new CyclicBehaviour(this) {
             public void action() {
                 ACLMessage msg = myAgent.receive(template);
