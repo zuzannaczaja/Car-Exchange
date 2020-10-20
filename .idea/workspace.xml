@@ -29,11 +29,16 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="Boot" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="jade.Boot" />
       <module name="Sieci społecznościowe i systemy wieloagentowe" />
-      <option name="PROGRAM_PARAMETERS" value="-gui buyer1:CarBuyerAgent1(The-Lord-Of-The-Rings);seller1:CarSellerAgent1;pingAgent:PingAgent;" />
+      <option name="PROGRAM_PARAMETERS" value="-gui carBuyer:CarBuyerAgent;buyer1:CarBuyerAgent1(The-Lord-Of-The-Rings);seller1:CarSellerAgent1;pingAgent:PingAgent;" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -70,14 +75,14 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="160" key="#Plugins/0.0.1920.1040@0.0.1920.1040" timestamp="1601975654631" />
-    <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1602681056077">
+    <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1603181567700">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1602681056077" />
-    <state x="1245" y="229" key="#com.intellij.ide.util.MemberChooser" timestamp="1602679934207">
+    <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1603181567700" />
+    <state x="1245" y="229" key="#com.intellij.ide.util.MemberChooser" timestamp="1603182098540">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="1245" y="229" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1602679934207" />
+    <state x="1245" y="229" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1603182098540" />
     <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1603178984829">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
