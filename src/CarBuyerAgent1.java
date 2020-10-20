@@ -76,7 +76,7 @@ public class CarBuyerAgent1 extends Agent {
         addBehaviour(new WakerBehaviour(this, 10000) {
             protected void handleElapsedTimeout(){
                 System.out.println("Agent " + myAgent.getLocalName() + ": It's wakeup-time. Bye...");
-                myAgent.doDelete();
+                //myAgent.doDelete();
             }
         });
     }
