@@ -5,14 +5,14 @@ public class CarSellerAgent extends Agent {
     // The catalogue of books for sale (maps the title of a book to its price)
     private Hashtable catalogue;
     // The GUI by means of which the user can add books in the catalogue
-    private BookSellerGui myGui;
+    //private BookSellerGui myGui;
     // Put agent initializations here
     protected void setup() {
         // Create the catalogue
         catalogue = new Hashtable();
         // Create and show the GUI
-        myGui = new BookSellerGui(this);
-        myGui.show();
+        //myGui = new BookSellerGui(this);
+        //myGui.show();
         // Add the behaviour serving requests for offer from buyer agents
         addBehaviour(new OfferRequestsServer());
         // Add the behaviour serving purchase orders from buyer agents
@@ -21,7 +21,7 @@ public class CarSellerAgent extends Agent {
     // Put agent clean-up operations here
     protected void takeDown() {
         // Close the GUI
-        myGui.dispose();
+        //myGui.dispose();
         // Printout a dismissal message
         System.out.println("Seller-agent "+getAID().getName()+" terminating.");
     }

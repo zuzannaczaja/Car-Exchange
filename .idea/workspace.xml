@@ -34,7 +34,7 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Wyklad">
     <configuration name="Boot" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="jade.Boot" />
       <module name="Sieci społecznościowe i systemy wieloagentowe" />
@@ -43,6 +43,17 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Wyklad" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="wyklad.GenethicAlgorithm" />
+      <module name="Sieci społecznościowe i systemy wieloagentowe" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Boot" />
+      <item itemvalue="Application.Wyklad" />
+    </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
@@ -75,14 +86,19 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="160" key="#Plugins/0.0.1920.1040@0.0.1920.1040" timestamp="1601975654631" />
-    <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1603181567700">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="2334" y="174" width="1092" height="714" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1603285907921">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
+    <state x="2334" y="174" width="1092" height="714" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1603285907921" />
     <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1603181567700" />
     <state x="1245" y="229" key="#com.intellij.ide.util.MemberChooser" timestamp="1603182098540">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="1245" y="229" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1603182098540" />
+    <state x="2609" y="321" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1603285903907">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2609" y="321" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1603285903907" />
     <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1603178984829">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -107,6 +123,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="440" y="94" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1603178989775" />
+    <state x="2471" y="140" key="new project wizard" timestamp="1603285749056">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2471" y="140" key="new project wizard/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1603285749056" />
     <state x="1096" y="244" width="672" height="677" key="run.anything.popup" timestamp="1602680052163">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
