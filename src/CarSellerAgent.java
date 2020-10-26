@@ -1,12 +1,36 @@
+/*****************************************************************
+JADE - Java Agent DEvelopment Framework is a framework to develop 
+multi-agent systems in compliance with the FIPA specifications.
+Copyright (C) 2000 CSELT S.p.A. 
+
+GNU Lesser General Public License
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation, 
+version 2.1 of the License. 
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the
+Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA  02111-1307, USA.
+ *****************************************************************/
+
 import jade.core.Agent;
-import jade.core.behaviours.*;
-import jade.domain.DFService;
+import jade.core.behaviours.*;	
+import jade.lang.acl.ACLMessage;	
+import jade.lang.acl.MessageTemplate;															 
+import jade.domain.DFService;	
+import jade.domain.FIPAException;							 
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
-import jade.domain.FIPAException;
-import jade.lang.acl.ACLMessage;
-import jade.core.behaviours.CyclicBehaviour;
-import jade.lang.acl.MessageTemplate;
+//import jade.core.behaviours.CyclicBehaviour;
+
 
 import java.util.*;
 public class CarSellerAgent extends Agent {
@@ -107,4 +131,40 @@ public class CarSellerAgent extends Agent {
         }
     }
     // End of inner class OfferRequestsServer
+
+    /**
+     Inner class PurchaseOrdersServer.
+     This is the behaviour used by Book-seller agents to serve incoming
+     offer acceptances (i.e. purchase orders) from buyer agents.
+     The seller agent removes the purchased book from its catalogue
+     and replies with an INFORM message to notify the buyer that the
+     purchase has been sucesfully completed.
+     */
+    private class PurchaseOrdersServer extends CyclicBehaviour {
+        public void action() {
+            MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL);
+            ACLMessage msg = myAgent.receive(mt);
+            if (msg != null) {
+                // ACCEPT_PROPOSAL Message received. Process it
+                String title = msg.getContent();
+                ACLMessage reply = msg.createReply();
+
+                Integer price = (Integer) catalogue.remove(title);
+                if (price != null) {
+                    reply.setPerformative(ACLMessage.INFORM);
+                    System.out.println(title+" sold to agent "+msg.getSender().getName());
+                }
+                else {
+                    // The requested book has been sold to another buyer in the meanwhile .
+                    reply.setPerformative(ACLMessage.FAILURE);
+                    reply.setContent("not-available");
+                }
+                myAgent.send(reply);
+            }
+            else {
+                block();
+            }
+        }
+    }  // End of inner class OfferRequestsServer
 }
+

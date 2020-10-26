@@ -27,7 +27,7 @@ public class CarBuyerAgent extends Agent {
             System.out.println("Target book is "+targetBookTitle);
 
             // Add a TickerBehaviour that schedules a request to seller agents every minute
-            addBehaviour(new TickerBehaviour(this, 60000) {
+            addBehaviour(new TickerBehaviour(this, 10000) {
                 protected void onTick() {
                     System.out.println("Trying to buy "+targetBookTitle);
                     // Update the list of seller agents
@@ -112,6 +112,7 @@ public class CarBuyerAgent extends Agent {
                         repliesCnt++;
                         if (repliesCnt >= sellerAgents.length) {
                             // We received all replies
+                            //System.out.println("DEBUG: WESZLO");
                             step = 2;
                         }
                     }
@@ -146,7 +147,6 @@ public class CarBuyerAgent extends Agent {
                         else {
                             System.out.println("Attempt failed: requested book already sold.");
                         }
-
                         step = 4;
                     }
                     else {
