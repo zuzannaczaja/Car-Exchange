@@ -26,9 +26,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-/**
- @author Giovanni Caire - TILAB
- */
+
 class CarSellerGui extends JFrame {
     private CarSellerAgent myAgent;
 
@@ -41,7 +39,7 @@ class CarSellerGui extends JFrame {
 
         JPanel p = new JPanel();
         p.setLayout(new GridLayout(2, 2));
-        p.add(new JLabel("Book title:"));
+        p.add(new JLabel("Car:"));
         titleField = new JTextField(15);
         p.add(titleField);
         p.add(new JLabel("Price:"));

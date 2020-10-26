@@ -33,7 +33,7 @@ public class CarBuyerAgent extends Agent {
                     // Update the list of seller agents
                     DFAgentDescription template = new DFAgentDescription();
                     ServiceDescription sd = new ServiceDescription();
-                    sd.setType("book-selling");
+                    sd.setType("car-selling");
                     template.addServices(sd);
                     try {
                         DFAgentDescription[] result = DFService.search(myAgent, template);
@@ -55,7 +55,7 @@ public class CarBuyerAgent extends Agent {
         }
         else {
             // Make the agent terminate
-            System.out.println("No target book title specified");
+            System.out.println("No target car title specified");
             doDelete();
         }
     }
@@ -87,11 +87,11 @@ public class CarBuyerAgent extends Agent {
                         cfp.addReceiver(sellerAgents[i]);
                     }
                     cfp.setContent(targetBookTitle);
-                    cfp.setConversationId("book-trade");
+                    cfp.setConversationId("car-trade");
                     cfp.setReplyWith("cfp"+System.currentTimeMillis()); // Unique value
                     myAgent.send(cfp);
                     // Prepare the template to get proposals
-                    mt = MessageTemplate.and(MessageTemplate.MatchConversationId("book-trade"),
+                    mt = MessageTemplate.and(MessageTemplate.MatchConversationId("car-trade"),
                             MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));
                     step = 1;
                     break;
@@ -124,11 +124,11 @@ public class CarBuyerAgent extends Agent {
                     ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
                     order.addReceiver(bestSeller);
                     order.setContent(targetBookTitle);
-                    order.setConversationId("book-trade");
+                    order.setConversationId("car-trade");
                     order.setReplyWith("order"+System.currentTimeMillis());
                     myAgent.send(order);
                     // Prepare the template to get the purchase order reply
-                    mt = MessageTemplate.and(MessageTemplate.MatchConversationId("book-trade"),
+                    mt = MessageTemplate.and(MessageTemplate.MatchConversationId("car-trade"),
                             MessageTemplate.MatchInReplyTo(order.getReplyWith()));
                     step = 3;
                     break;

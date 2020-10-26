@@ -28,8 +28,8 @@ public class CarSellerAgent extends Agent {
         DFAgentDescription dfd = new DFAgentDescription();
         dfd.setName(getAID());
         ServiceDescription sd = new ServiceDescription();
-        sd.setType("book-selling");
-        sd.setName("JADE-book-trading");
+        sd.setType("car-selling");
+        sd.setName("JADE-car-trading");
         dfd.addServices(sd);
         try {
             DFService.register(this, dfd);
