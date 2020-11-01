@@ -6,9 +6,9 @@ import java.util.Random;
 public class StartCarExchange extends Agent {
     //region Ilość agentów
     private static final int BUYERS_COUNT = 2;
-    private static final int SELLERS_COUNT = 1;
-    private static final int SELLERS_CARS = 1;
-    private static final int BUYERS_CARS = 1;
+    private static final int SELLERS_COUNT = 2;
+    private static final int SELLERS_CARS = 2;
+    private static final int BUYERS_CARS = 2;
     //endregion
     //region Nazwy agentów
     private static final String SELLER_NAME = "Seller";
@@ -29,12 +29,16 @@ public class StartCarExchange extends Agent {
             "Sedan", "Hatchback", "SUV", "Cabrio"
     };
     private static final String[] engineTypeList = {
-            "Gasoline", "Diesel", "LPG", "Electric", "Hybrid"
+            "Gasoline", "Diesel", "LPG", "Hybrid", //"Electric"
     };
-    private static final float engineCapacityMin = 0.9f;
-    private static final float engineCapacityMax = 5.0f;
-    private static final int yearOfProductionMin = 1990;
-    private static final int yearOfProductionMax = 2020;
+    private static final float ENGINE_CAPACITY_MIN = 0.9f;
+    private static final float ENGINE_CAPACITY_MAX = 5.0f;
+    private static final int YEAR_OF_PRODUCTION_MIN = 1990;
+    private static final int YEAR_OF_PRODUCTION_MAX = 2020;
+    private static final int BASE_PRICE_MIN = 2000;
+    private static final int BASE_PRICE_MAX = 100000;
+    private static final int ADDITIONAL_COSTS_MIN = 0;
+    private static final int ADDITIONAL_COSTS_MAX = 10000;
     //endregion
 
     public static void main(String[] args){
@@ -47,6 +51,7 @@ public class StartCarExchange extends Agent {
 
     private static StringBuilder createSellerAgents(){
         StringBuilder agentList = new StringBuilder();
+        System.out.println("SPRZEDAJACY: ");
         for (int i = 0; i < SELLERS_COUNT; i++){
             agentList.append(SELLER_NAME);
             agentList.append(i + 1);
@@ -54,12 +59,13 @@ public class StartCarExchange extends Agent {
             agentList.append(generateCars(carList));
             agentList.append(generateCars(bodyTypeList));
             agentList.append(generateCars(engineTypeList));
-            agentList.append(generateEngineCapacity(engineCapacityMin, engineCapacityMax));
-            agentList.append(generateYearOfProduction(yearOfProductionMin, yearOfProductionMax));
-            agentList.append("19000, 500");
+            agentList.append(generateRandomFloat(ENGINE_CAPACITY_MIN, ENGINE_CAPACITY_MAX));
+            agentList.append(generateRandomInt(YEAR_OF_PRODUCTION_MIN, YEAR_OF_PRODUCTION_MAX, true));
+            agentList.append(generateRandomInt(BASE_PRICE_MIN, BASE_PRICE_MAX, true));
+            agentList.append(generateRandomInt(ADDITIONAL_COSTS_MIN, ADDITIONAL_COSTS_MAX, false));
             agentList.append(");");
+            System.out.println(agentList + "\n");
         }
-        System.out.println("SPRZEDAJACY: " + agentList);
         return agentList;
     }
 
@@ -96,17 +102,20 @@ public class StartCarExchange extends Agent {
             return list[id] + ", ";
     }
 
-    private static String generateEngineCapacity(float min, float max){
-        Random r=new Random();
+    private static String generateRandomFloat(float min, float max){
+        Random r = new Random();
         float randomFloat = min + r.nextFloat() * (max - min);
         int scale = (int) Math.pow(10, 1);
         float roundedFloat = ((float)Math.round(randomFloat * scale) / scale);
         return roundedFloat + ", ";
     }
 
-    private static String generateYearOfProduction(int min, int max){
-        Random r=new Random();
+    private static String generateRandomInt(int min, int max, boolean coma){
+        Random r = new Random();
         int randomInt = r.nextInt(max-min+1)+min;
-        return randomInt + ", ";
+        if(coma)
+            return randomInt + ", ";
+        else
+            return String.valueOf(randomInt);
     }
 }
