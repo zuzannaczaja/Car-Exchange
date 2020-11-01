@@ -12,7 +12,6 @@ import jade.lang.acl.MessageTemplate;
 public class CarBuyerAgent extends Agent {
     // The title of the book to buy
     private String targetCar;
-    private int startBudget = 100000;
 
     // The list of known seller agents
     private AID[] sellerAgents;
@@ -73,6 +72,7 @@ public class CarBuyerAgent extends Agent {
         private int repliesCnt = 0; // The counter of replies from seller agents
         private MessageTemplate mt; // The template to receive replies
         private int step = 0;
+        Object[] args = getArguments();
 
         public void action() {
             switch (step) {
@@ -101,7 +101,7 @@ public class CarBuyerAgent extends Agent {
                         if (reply.getPerformative() == ACLMessage.PROPOSE) {
                             // This is an offer
 
-                            if ((bestSeller == null || price < bestPrice) && price <= startBudget) {
+                            if ((bestSeller == null || price < bestPrice) && price <= (Integer) args[2]) {
                                 // This is the best offer at present
                                 bestPrice = price;
                                 bestSeller = reply.getSender();
@@ -139,8 +139,9 @@ public class CarBuyerAgent extends Agent {
                             // Purchase successful. We can terminate
                             System.out.println(targetCar +" został pomyślnie kupiony od: "+reply.getSender().getName());
                             System.out.println("Cena = "+bestPrice);
-                            startBudget = startBudget - bestPrice;
-                            System.out.println("Budżet " + getAID().getName() + " wynosi teraz: " + startBudget);
+                            int budget = (Integer) args[2] - bestPrice;
+                            args[2] = Integer.toString(budget);
+                            System.out.println("Budżet " + getAID().getName() + " wynosi teraz: " + args[2]);
                             myAgent.doDelete();
                         }
                         else {
