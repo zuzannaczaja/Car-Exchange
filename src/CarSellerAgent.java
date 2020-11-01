@@ -64,11 +64,12 @@ public class CarSellerAgent extends Agent {
     /**
      Wywoływane gdy sprzedający doda nowy samochód na sprzedaż.
      */
-    public void updateCatalogue(final String title, final int price) {
+    public void updateCatalogue(final String brandAndModel, final Car car) {
         addBehaviour(new OneShotBehaviour() {
             public void action() {
-                catalogue.put(title, price);
-                System.out.println(title+" został dodany do katalogu. Cena = "+price);
+                catalogue.put(brandAndModel, car);
+                int totalPrice = car.getBasicPrice() + car.getAdditionalCosts();
+                System.out.println(brandAndModel + " został dodany do katalogu. Cena = " + totalPrice);
             }
         } );
     }
@@ -79,9 +80,9 @@ public class CarSellerAgent extends Agent {
             ACLMessage msg = myAgent.receive(mt);
             if (msg != null) {
                 // Message received. Process it
-                String title = msg.getContent();
+                String brand = msg.getContent();
                 ACLMessage reply = msg.createReply();
-                Integer price = (Integer) catalogue.get(title);
+                Integer price = (Integer) catalogue.get(brand);
                 if (price != null) {
                     // The requested book is available for sale. Reply with the price
                     reply.setPerformative(ACLMessage.PROPOSE);
@@ -106,13 +107,13 @@ public class CarSellerAgent extends Agent {
             ACLMessage msg = myAgent.receive(mt);
             if (msg != null) {
                 // ACCEPT_PROPOSAL Message received. Process it
-                String title = msg.getContent();
+                String brand = msg.getContent();
                 ACLMessage reply = msg.createReply();
 
-                Integer price = (Integer) catalogue.remove(title);
+                Integer price = (Integer) catalogue.remove(brand);
                 if (price != null) {
                     reply.setPerformative(ACLMessage.INFORM);
-                    System.out.println(title+" sprzedany agentowi "+msg.getSender().getName());
+                    System.out.println(brand+" sprzedany agentowi "+msg.getSender().getName());
                 }
                 else {
                     // The requested book has been sold to another buyer in the meanwhile .
