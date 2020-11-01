@@ -6,7 +6,7 @@ public class Car {
     String engineType;
     float engineCapacity;
     int yearOfProduction;
-    int basicPrice;
+    int basePrice;
     int additionalCosts;
 
     public Car(String brand, String model, String bodyType, String engineType, int engineCapacity, int yearOfProduction, int basicPrice, int additionalCosts){
@@ -16,7 +16,7 @@ public class Car {
         this.engineType = engineType;
         this.engineCapacity = engineCapacity;
         this.yearOfProduction = yearOfProduction;
-        this.basicPrice = basicPrice;
+        this.basePrice = basicPrice;
         this.additionalCosts = additionalCosts;
     }
 
@@ -44,8 +44,8 @@ public class Car {
         return yearOfProduction;
     }
 
-    public int getBasicPrice() {
-        return basicPrice;
+    public int getBasePrice() {
+        return basePrice;
     }
 
     public int getAdditionalCosts() {
@@ -76,8 +76,8 @@ public class Car {
         this.yearOfProduction = yearOfProduction;
     }
 
-    public void setBasicPrice(int basicPrice) {
-        this.basicPrice = basicPrice;
+    public void setBasePrice(int basePrice) {
+        this.basePrice = basePrice;
     }
 
     public void setAdditionalCosts(int additionalCosts) {

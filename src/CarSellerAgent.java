@@ -68,7 +68,7 @@ public class CarSellerAgent extends Agent {
         addBehaviour(new OneShotBehaviour() {
             public void action() {
                 catalogue.put(brandAndModel, car);
-                int totalPrice = car.getBasicPrice() + car.getAdditionalCosts();
+                int totalPrice = car.getBasePrice() + car.getAdditionalCosts();
                 System.out.println(brandAndModel + " został dodany do katalogu. Cena = " + totalPrice);
             }
         } );
