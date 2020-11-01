@@ -5,7 +5,7 @@ public class Main extends Agent {
     public static void main(String[] args){
         String carExample = "BMW";
         int buyerAmount = 3;
-        int sellerAmount = 1;
+        int sellerAmount = 10;
         String agentList = "";
 
         for (int i = 0; i < buyerAmount; i++){
@@ -13,7 +13,7 @@ public class Main extends Agent {
         }
 
         for (int i = 0; i < sellerAmount; i++){
-            agentList += "CarSeller" + (i+1) + ":CarSellerAgent;";
+            agentList += "CarSeller" + (i+1) + ":CarSellerAgentNoGui;";
         }
 
         String[] container = {

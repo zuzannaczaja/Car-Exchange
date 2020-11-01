@@ -22,8 +22,8 @@ public class CarSellerAgent extends Agent {
         catalogue = new Hashtable();
 
         // Create and show the GUI
-        myGui = new CarSellerGui(this);
-        myGui.showGui();
+            myGui = new CarSellerGui(this);
+            myGui.showGui();
 
         // Register the car-selling service in the yellow pages
         DFAgentDescription dfd = new DFAgentDescription();

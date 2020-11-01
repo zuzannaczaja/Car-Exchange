@@ -13,17 +13,11 @@ import java.util.*;
 public class CarSellerAgentNoGui extends Agent {
     // The catalogue of books for sale (maps the title of a book to its price)
     private Hashtable catalogue;
-    // The GUI by means of which the user can add books in the catalogue
-    //private CarSellerGui myGui;
 
     // Put agent initializations here
     protected void setup() {
         // Create the catalogue
         catalogue = new Hashtable();
-
-        // Create and show the GUI
-        //myGui = new CarSellerGui(this);
-        //myGui.showGui();
 
         // Register the car-selling service in the yellow pages
         DFAgentDescription dfd = new DFAgentDescription();
