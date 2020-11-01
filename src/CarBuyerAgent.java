@@ -94,14 +94,12 @@ public class CarBuyerAgent extends Agent {
                 case 1:
                     // Receive all proposals/refusals from seller agents
                     ACLMessage reply = myAgent.receive(mt);
-                    System.out.println("!!!!DEBUG:"+reply.getContent());
-                    int price = Integer.parseInt(reply.getContent());
 
                     if (reply != null) {
                         // Reply received
                         if (reply.getPerformative() == ACLMessage.PROPOSE) {
                             // This is an offer
-
+                            int price = Integer.parseInt(reply.getContent());
                             if ((bestSeller == null || price < bestPrice) && price <= (Integer) args[2]) {
                                 // This is the best offer at present
                                 bestPrice = price;
