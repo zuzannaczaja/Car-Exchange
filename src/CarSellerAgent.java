@@ -26,7 +26,7 @@ public class CarSellerAgent extends Agent {
             myGui = new CarSellerGui(this);
             myGui.showGui();
 
-        // Register the book-selling service in the yellow pages
+        // Register the car-selling service in the yellow pages
         DFAgentDescription dfd = new DFAgentDescription();
         dfd.setName(getAID());
         ServiceDescription sd = new ServiceDescription();
