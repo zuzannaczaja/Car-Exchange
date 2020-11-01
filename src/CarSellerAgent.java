@@ -6,6 +6,7 @@ import jade.domain.DFService;
 import jade.domain.FIPAException;							 
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.lang.acl.UnreadableException;
 
 
 import java.util.*;
@@ -82,7 +83,12 @@ public class CarSellerAgent extends Agent {
                 // Message received. Process it
                 String brand = msg.getContent();
                 ACLMessage reply = msg.createReply();
-                Integer price = (Integer) catalogue.get(brand);
+                Car car = (Car) catalogue.get(brand);
+                Integer price = null;
+                if(car != null){
+                    System.out.println("DEBUG " + car.getBasePrice());
+                    price = car.getBasePrice();
+                }
                 if (price != null) {
                     // The requested book is available for sale. Reply with the price
                     reply.setPerformative(ACLMessage.PROPOSE);
@@ -110,7 +116,10 @@ public class CarSellerAgent extends Agent {
                 String brand = msg.getContent();
                 ACLMessage reply = msg.createReply();
 
-                Integer price = (Integer) catalogue.remove(brand);
+                Car car = (Car) catalogue.get(brand);
+                //price = car.getBasePrice();
+                Integer price = (Integer) car.getBasePrice();
+                catalogue.remove(brand);
                 if (price != null) {
                     reply.setPerformative(ACLMessage.INFORM);
                     System.out.println(brand+" sprzedany agentowi "+msg.getSender().getName());

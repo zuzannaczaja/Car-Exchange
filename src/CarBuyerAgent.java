@@ -100,7 +100,7 @@ public class CarBuyerAgent extends Agent {
                         if (reply.getPerformative() == ACLMessage.PROPOSE) {
                             // This is an offer
                             int price = Integer.parseInt(reply.getContent());
-                            if ((bestSeller == null || price < bestPrice) && price <= (Integer) args[2]) {
+                            if ((bestSeller == null || price < bestPrice) && price <= Integer.parseInt((String) args[2])) {
                                 // This is the best offer at present
                                 bestPrice = price;
                                 bestSeller = reply.getSender();
@@ -138,7 +138,7 @@ public class CarBuyerAgent extends Agent {
                             // Purchase successful. We can terminate
                             System.out.println(targetCar +" został pomyślnie kupiony od: "+reply.getSender().getName());
                             System.out.println("Cena = "+bestPrice);
-                            int budget = (Integer) args[2] - bestPrice;
+                            int budget = Integer.parseInt((String) args[2]) - bestPrice;
                             args[2] = Integer.toString(budget);
                             System.out.println("Budżet " + getAID().getName() + " wynosi teraz: " + args[2]);
                             myAgent.doDelete();
