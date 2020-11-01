@@ -94,6 +94,7 @@ public class CarBuyerAgent extends Agent {
                 case 1:
                     // Receive all proposals/refusals from seller agents
                     ACLMessage reply = myAgent.receive(mt);
+                    System.out.println("!!!!DEBUG:"+reply.getContent());
                     int price = Integer.parseInt(reply.getContent());
 
                     if (reply != null) {

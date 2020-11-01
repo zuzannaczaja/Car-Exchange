@@ -4,7 +4,7 @@ public class Car {
     String model;
     String bodyType;
     String engineType;
-    int engineCapacity;
+    float engineCapacity;
     int yearOfProduction;
     int basicPrice;
     int additionalCosts;
@@ -36,7 +36,7 @@ public class Car {
         return engineType;
     }
 
-    public int getEngineCapacity() {
+    public float getEngineCapacity() {
         return engineCapacity;
     }
 
@@ -68,7 +68,7 @@ public class Car {
         this.engineType = engineType;
     }
 
-    public void setEngineCapacity(int engineCapacity) {
+    public void setEngineCapacity(float engineCapacity) {
         this.engineCapacity = engineCapacity;
     }
 

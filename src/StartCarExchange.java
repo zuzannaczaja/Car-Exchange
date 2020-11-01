@@ -1,6 +1,8 @@
 import jade.Boot;
 import jade.core.Agent;
 
+import java.util.Random;
+
 public class StartCarExchange extends Agent {
     //region Ilość agentów
     private static final int BUYERS_COUNT = 2;
@@ -11,11 +13,11 @@ public class StartCarExchange extends Agent {
     //region Nazwy agentów
     private static final String SELLER_NAME = "Seller";
     private static final String BUYER_NAME = "Buyer";
-    private static final String SELLER_PACKGAE = ":CarSellerAgent";
+    private static final String SELLER_PACKGAE = ":CarSellerAgentNoGui";
     private static final String BUYER_PACKGAE = ":CarBuyerAgent";
     //endregion
-    //region Lista samochodów
-    private static String[] carList = {
+    //region Listy i wartości
+    private static final String[] carList = {
             "Renault|Clio", "Renault|Megane",
             "Mazda|2", "Mazda|3", "Mazda|6",
             "Audi|A4", "Audi|A6", "Audi|A8",
@@ -23,10 +25,19 @@ public class StartCarExchange extends Agent {
             "Dacia|Duster", "Dacia|Logan",
             "Hyundai|i20", "Hyundai|i30"
     };
+    private static final String[] bodyTypeList = {
+            "Sedan", "Hatchback", "SUV", "Cabrio"
+    };
+    private static final String[] engineTypeList = {
+            "Gasoline", "Diesel", "LPG", "Electric", "Hybrid"
+    };
+    private static final float engineCapacityMin = 0.9f;
+    private static final float engineCapacityMax = 5.0f;
+    private static final int yearOfProductionMin = 1990;
+    private static final int yearOfProductionMax = 2020;
     //endregion
 
     public static void main(String[] args){
-        String carExample = "BMW";
         StringBuilder agentList = new StringBuilder();
         agentList.append(createSellerAgents());
         agentList.append(createBuyerAgents());
@@ -39,9 +50,16 @@ public class StartCarExchange extends Agent {
         for (int i = 0; i < SELLERS_COUNT; i++){
             agentList.append(SELLER_NAME);
             agentList.append(i + 1);
-            agentList.append(SELLER_PACKGAE);
-            agentList.append(";");
+            agentList.append(SELLER_PACKGAE + "(");
+            agentList.append(generateCars(carList));
+            agentList.append(generateCars(bodyTypeList));
+            agentList.append(generateCars(engineTypeList));
+            agentList.append(generateEngineCapacity(engineCapacityMin, engineCapacityMax));
+            agentList.append(generateYearOfProduction(yearOfProductionMin, yearOfProductionMax));
+            agentList.append("19000, 500");
+            agentList.append(");");
         }
+        System.out.println("SPRZEDAJACY: " + agentList);
         return agentList;
     }
 
@@ -51,9 +69,11 @@ public class StartCarExchange extends Agent {
             agentList.append(BUYER_NAME);
             agentList.append(i + 1);
             agentList.append(BUYER_PACKGAE + "(");
-            agentList.append(generateBuyerCars());
+            agentList.append(generateCars(carList));
+            agentList.append(100000);
             agentList.append(");");
         }
+        System.out.println("KUPUJACY: " + agentList);
         return agentList;
     }
 
@@ -67,8 +87,26 @@ public class StartCarExchange extends Agent {
         Boot.main(container);
     }
 
-    private static String generateBuyerCars(){
-        String temp = "RENAULT";
-        return temp;
+    private static String generateCars(String[] list){
+        Random r=new Random();
+        int id = r.nextInt(list.length);
+        if(list[id].contains("|"))
+            return list[id].replace("|", ", ") + ", ";
+        else
+            return list[id] + ", ";
+    }
+
+    private static String generateEngineCapacity(float min, float max){
+        Random r=new Random();
+        float randomFloat = min + r.nextFloat() * (max - min);
+        int scale = (int) Math.pow(10, 1);
+        float roundedFloat = ((float)Math.round(randomFloat * scale) / scale);
+        return roundedFloat + ", ";
+    }
+
+    private static String generateYearOfProduction(int min, int max){
+        Random r=new Random();
+        int randomInt = r.nextInt(max-min+1)+min;
+        return randomInt + ", ";
     }
 }
