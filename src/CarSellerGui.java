@@ -20,7 +20,7 @@ class CarSellerGui extends JFrame {
         myAgent = a;
 
         JPanel p = new JPanel();
-        p.setLayout(new GridLayout(7, 2));
+        p.setLayout(new GridLayout(8, 2));
         p.add(new JLabel("Brand:"));
         brandField = new JTextField(15);
         p.add(brandField);
