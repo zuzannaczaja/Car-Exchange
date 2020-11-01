@@ -24,7 +24,9 @@ public class CarBuyerAgent extends Agent {
         // Get the title of the book to buy as a start-up argument
         Object[] args = getArguments();
         if (args != null && args.length > 0) {
-            targetCar = (String) args[0] + " " + (String) args[1];
+            targetCar = (String) args[0];
+
+            //targetCar = (String) args[0] + " " + (String) args[1];
             System.out.println("Poszukiwany samochód to: "+ targetCar);
 
             // Add a TickerBehaviour that schedules a request to seller agents every minute
