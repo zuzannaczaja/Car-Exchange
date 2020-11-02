@@ -107,6 +107,9 @@ public class CarBuyerAgent extends Agent {
                                 // This is the best offer at present
                                 bestPrice = price;
                                 bestSeller = reply.getSender();
+                                if(price <= Integer.parseInt((String) args[2])){
+                                    System.out.println("Nieudana próba kupna: Budżet kupującego jest zbyt niski.");
+                                }
                             }
                         }
                         repliesCnt++;
