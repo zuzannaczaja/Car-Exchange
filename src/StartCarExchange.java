@@ -5,15 +5,15 @@ import java.util.Random;
 
 public class StartCarExchange extends Agent {
     //region Ilość agentów
-    private static final int BUYERS_COUNT = 2;
-    private static final int SELLERS_COUNT = 1;
+    private static final int BUYERS_COUNT = 4;
+    private static final int SELLERS_COUNT = 10;
     private static final int SELLERS_CARS = 1;
-    private static final int BUYERS_CARS = 2;
+    private static final int BUYERS_CARS = 1;
     //endregion
     //region Nazwy agentów
     private static final String SELLER_NAME = "Seller";
     private static final String BUYER_NAME = "Buyer";
-    private static final String SELLER_PACKGAE = ":CarSellerAgent";
+    private static final String SELLER_PACKGAE = ":CarSellerAgentNoGui";
     private static final String BUYER_PACKGAE = ":CarBuyerAgent";
     //endregion
     //region Listy i wartości
@@ -56,16 +56,16 @@ public class StartCarExchange extends Agent {
             for (int y = 0; y < SELLERS_CARS; y++){
                 agentList.append(SELLER_NAME);
                 agentList.append(i + 1);
-                agentList.append(SELLER_PACKGAE + ";");
-                //agentList.append(SELLER_PACKGAE + "(");
-                //agentList.append(generateCars(carList));
-                //agentList.append(generateCars(bodyTypeList));
-                //agentList.append(generateCars(engineTypeList));
-                //agentList.append(generateRandomFloat(ENGINE_CAPACITY_MIN, ENGINE_CAPACITY_MAX));
-                //agentList.append(generateRandomInt(YEAR_OF_PRODUCTION_MIN, YEAR_OF_PRODUCTION_MAX, true));
-                //agentList.append(generateRandomInt(BASE_PRICE_MIN, BASE_PRICE_MAX, true));
-                //agentList.append(generateRandomInt(ADDITIONAL_COSTS_MIN, ADDITIONAL_COSTS_MAX, false));
-                //agentList.append(");");
+                //agentList.append(SELLER_PACKGAE + ";");
+                agentList.append(SELLER_PACKGAE + "(");
+                agentList.append(generateCars(carList));
+                agentList.append(generateCars(bodyTypeList));
+                agentList.append(generateCars(engineTypeList));
+                agentList.append(generateRandomFloat(ENGINE_CAPACITY_MIN, ENGINE_CAPACITY_MAX));
+                agentList.append(generateRandomInt(YEAR_OF_PRODUCTION_MIN, YEAR_OF_PRODUCTION_MAX, true));
+                agentList.append(generateRandomInt(BASE_PRICE_MIN, BASE_PRICE_MAX, true));
+                agentList.append(generateRandomInt(ADDITIONAL_COSTS_MIN, ADDITIONAL_COSTS_MAX, false));
+                agentList.append(");");
             }
         }
         String temp = String.valueOf(agentList);
