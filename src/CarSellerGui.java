@@ -80,8 +80,6 @@ class CarSellerGui extends JFrame {
         p.add(addButton);
         getContentPane().add(p, BorderLayout.SOUTH);
 
-        // Make the agent terminate when the user closes
-        // the GUI using the button on the upper right corner
         addWindowListener(new	WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 myAgent.doDelete();

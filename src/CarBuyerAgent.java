@@ -10,31 +10,23 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
 public class CarBuyerAgent extends Agent {
-    // The title of the book to buy
-    private String targetCar;
 
-    // The list of known seller agents
+    private String targetCar;
     private AID[] sellerAgents;
 
-    // Put agent initializations here
     protected void setup() {
-        // Printout a welcome message
+
         System.out.println("Witaj świecie! Agent kupujący "+getAID().getName()+" jest gotowy.");
 
-        // Get the title of the book to buy as a start-up argument
         Object[] args = getArguments();
         if (args != null && args.length > 0) {
-            //targetCar = (String) args[0];
-            targetCar = (String) args[0] + " " + (String) args[1];
 
-            //targetCar = (String) args[0] + " " + (String) args[1];
+            targetCar = (String) args[0] + " " + (String) args[1];
             System.out.println("Poszukiwany samochód to: "+ targetCar);
 
-            // Add a TickerBehaviour that schedules a request to seller agents every minute
             addBehaviour(new TickerBehaviour(this, 10000) {
                 protected void onTick() {
                     System.out.println("Podejmuję próbę kupna "+ targetCar);
-                    // Update the list of seller agents
                     DFAgentDescription template = new DFAgentDescription();
                     ServiceDescription sd = new ServiceDescription();
                     sd.setType("car-selling");
@@ -51,60 +43,48 @@ public class CarBuyerAgent extends Agent {
                     catch (FIPAException fe) {
                         fe.printStackTrace();
                     }
-
-                    // Perform the request
                     myAgent.addBehaviour(new RequestPerformer());
                 }
             } );
         } else {
-            // Make the agent terminate
             System.out.println("Agent kupujący nie ma określonego samochodu!");
             doDelete();
         }
     }
 
-    // Put agent clean-up operations here
     protected void takeDown() {
-        // Printout a dismissal message
         System.out.println("Agent kupujący "+getAID().getName()+" kończy działanie.");
     }
 
     private class RequestPerformer extends Behaviour {
-        private AID bestSeller; // The agent who provides the best offer
-        private int bestPrice;  // The best offered price
-        private int repliesCnt = 0; // The counter of replies from seller agents
-        private MessageTemplate mt; // The template to receive replies
+        private AID bestSeller;
+        private int bestPrice;
+        private int repliesCnt = 0;
+        private MessageTemplate mt;
         private int step = 0;
         Object[] args = getArguments();
 
         public void action() {
             switch (step) {
                 case 0:
-                    // Send the cfp to all sellers
                     ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
                     for (int i = 0; i < sellerAgents.length; ++i) {
                         cfp.addReceiver(sellerAgents[i]);
                     }
                     cfp.setContent(targetCar);
                     cfp.setConversationId("car-trade");
-                    cfp.setReplyWith("cfp"+System.currentTimeMillis()); // Unique value
+                    cfp.setReplyWith("cfp"+System.currentTimeMillis());
                     myAgent.send(cfp);
-                    // Prepare the template to get proposals
                     mt = MessageTemplate.and(MessageTemplate.MatchConversationId("car-trade"),
                             MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));
                     step = 1;
                     break;
                 case 1:
-                    // Receive all proposals/refusals from seller agents
                     ACLMessage reply = myAgent.receive(mt);
-
                     if (reply != null) {
-                        // Reply received
                         if (reply.getPerformative() == ACLMessage.PROPOSE) {
-                            // This is an offer
                             int price = Integer.parseInt(reply.getContent());
                             if ((bestSeller == null || price < bestPrice) && price <= Integer.parseInt((String) args[2])) {
-                                // This is the best offer at present
                                 bestPrice = price;
                                 bestSeller = reply.getSender();
                             }
@@ -114,7 +94,6 @@ public class CarBuyerAgent extends Agent {
                         }
                         repliesCnt++;
                         if (repliesCnt >= sellerAgents.length) {
-                            // We received all replies
                             step = 2;
                         }
                     }
@@ -123,25 +102,20 @@ public class CarBuyerAgent extends Agent {
                     }
                     break;
                 case 2:
-                    // Send the purchase order to the seller that provided the best offer
                     ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
                     order.addReceiver(bestSeller);
                     order.setContent(targetCar);
                     order.setConversationId("car-trade");
                     order.setReplyWith("order"+System.currentTimeMillis());
                     myAgent.send(order);
-                    // Prepare the template to get the purchase order reply
                     mt = MessageTemplate.and(MessageTemplate.MatchConversationId("car-trade"),
                             MessageTemplate.MatchInReplyTo(order.getReplyWith()));
                     step = 3;
                     break;
                 case 3:
-                    // Receive the purchase order reply
                     reply = myAgent.receive(mt);
                     if (reply != null) {
-                        // Purchase order reply received
                         if (reply.getPerformative() == ACLMessage.INFORM) {
-                            // Purchase successful. We can terminate
                             System.out.println(targetCar +" został pomyślnie kupiony od: "+reply.getSender().getName());
                             System.out.println("Cena = "+bestPrice);
                             int budget = Integer.parseInt((String) args[2]) - bestPrice;

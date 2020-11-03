@@ -67,11 +67,7 @@ public class CarSellerAgent extends Agent {
     public void updateCatalogue(final String brandAndModel, final Car car) {
         addBehaviour(new OneShotBehaviour() {
             public void action() {
-
                 addBehaviour(createSellingCarBehaviour(brandAndModel, car));
-               // catalogue.put(brandAndModel, car);
-               // System.out.println(brandAndModel + " został dodany do katalogu. Cena = " + car.getTotalPrice());
-
             }
         } );
     }
@@ -81,7 +77,6 @@ public class CarSellerAgent extends Agent {
             MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.CFP);
             ACLMessage msg = myAgent.receive(mt);
             if (msg != null) {
-                // Message received. Process it
                 String brand = msg.getContent();
                 ACLMessage reply = msg.createReply();
                 Car car = (Car) catalogue.get(brand);
@@ -90,12 +85,10 @@ public class CarSellerAgent extends Agent {
                     price = car.getTotalPrice();
                 }
                 if (price != null) {
-                    // The requested book is available for sale. Reply with the price
                     reply.setPerformative(ACLMessage.PROPOSE);
                     reply.setContent(String.valueOf(price.intValue()));
                 }
                 else {
-                    // The requested book is NOT available for sale.
                     reply.setPerformative(ACLMessage.REFUSE);
                     reply.setContent("not-available");
                 }
