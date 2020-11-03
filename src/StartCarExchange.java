@@ -7,8 +7,8 @@ public class StartCarExchange extends Agent {
     //region Ilość agentów
     private static final int BUYERS_COUNT = 4;
     private static final int SELLERS_COUNT = 10;
-    private static final int SELLERS_CARS = 1;
-    private static final int BUYERS_CARS = 1;
+    private static final int SELLERS_CARS = 2;
+    private static final int BUYERS_CARS = 2;
     //endregion
     //region Nazwy agentów
     private static final String SELLER_NAME = "Seller";

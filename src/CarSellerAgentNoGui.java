@@ -20,9 +20,9 @@ public class CarSellerAgentNoGui extends Agent {
         catalogue = new Hashtable();
         Object[] args = getArguments();
         if (args != null && args.length > 0) {
-        String test = (String) args[0] + " " + (String) args[1]+ " " + (String) args[2]+ " " + (String) args[3]
-                + " " + (String) args[4]+ " " + (String) args[5]+ " " + (String) args[6]+ " " + (String) args[7];
-        System.out.println(test);
+        //String test = (String) args[0] + " " + (String) args[1]+ " " + (String) args[2]+ " " + (String) args[3]
+        //        + " " + (String) args[4]+ " " + (String) args[5]+ " " + (String) args[6]+ " " + (String) args[7];
+        //System.out.println(test);
         Car car = new Car((String) args[0], (String) args[1], (String) args[2], (String) args[3],
                 Float.parseFloat((String) args[4]), Integer.parseInt((String) args[5]), Integer.parseInt((String) args[6]), Integer.parseInt((String) args[7]));
         String brandAndModel = (String) args[0] + " " + (String) args[1];
@@ -75,6 +75,7 @@ public class CarSellerAgentNoGui extends Agent {
                 addBehaviour(createSellingCarBehaviour(brandAndModel, car));
                 //catalogue.put(brandAndModel, car);
                 //System.out.println(brandAndModel + " został dodany do katalogu. Cena = " + car.getTotalPrice());
+
             }
         } );
     }
@@ -122,7 +123,11 @@ public class CarSellerAgentNoGui extends Agent {
 
                 Car car = (Car) catalogue.get(brand);
                 //price = car.getBasePrice();
-                Integer price = (Integer) car.getTotalPrice();
+                Integer price = null;
+                if(car != null){
+                    // System.out.println("DEBUG " + car.getBasePrice());
+                    price = car.getTotalPrice();
+                }
                 catalogue.remove(brand);
                 if (price != null) {
                     reply.setPerformative(ACLMessage.INFORM);

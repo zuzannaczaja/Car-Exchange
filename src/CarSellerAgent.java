@@ -71,6 +71,7 @@ public class CarSellerAgent extends Agent {
                 addBehaviour(createSellingCarBehaviour(brandAndModel, car));
                // catalogue.put(brandAndModel, car);
                // System.out.println(brandAndModel + " został dodany do katalogu. Cena = " + car.getTotalPrice());
+
             }
         } );
     }
