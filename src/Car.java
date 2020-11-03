@@ -52,6 +52,12 @@ public class Car {
         return additionalCosts;
     }
 
+    public int getTotalPrice(){
+        return (additionalCosts + basePrice);
+    }
+
+
+
     public void setBrand(String brand) {
         this.brand = brand;
     }
@@ -83,4 +89,5 @@ public class Car {
     public void setAdditionalCosts(int additionalCosts) {
         this.additionalCosts = additionalCosts;
     }
+
 }

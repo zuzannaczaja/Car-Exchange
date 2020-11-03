@@ -45,7 +45,7 @@ public class CarBuyerAgent extends Agent {
                         sellerAgents = new AID[result.length];
                         for (int i = 0; i < result.length; ++i) {
                             sellerAgents[i] = result[i].getName();
-                            System.out.println(sellerAgents[i].getName());
+                            //System.out.println(sellerAgents[i].getName());
                         }
                     }
                     catch (FIPAException fe) {
@@ -107,9 +107,9 @@ public class CarBuyerAgent extends Agent {
                                 // This is the best offer at present
                                 bestPrice = price;
                                 bestSeller = reply.getSender();
-                                if(price > Integer.parseInt((String) args[2])){
-                                    System.out.println("Nieudana próba kupna: Budżet kupującego jest zbyt niski.");
-                                }
+                            }
+                            if(price > Integer.parseInt((String) args[2])){
+                                System.out.println("Nieudana próba kupna: Budżet kupującego jest zbyt niski.");
                             }
                         }
                         repliesCnt++;
