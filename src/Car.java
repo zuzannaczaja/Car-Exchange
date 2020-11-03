@@ -9,7 +9,7 @@ public class Car {
     int basePrice;
     int additionalCosts;
 
-    public Car(String brand, String model, String bodyType, String engineType, int engineCapacity, int yearOfProduction, int basicPrice, int additionalCosts){
+    public Car(String brand, String model, String bodyType, String engineType, float engineCapacity, int yearOfProduction, int basicPrice, int additionalCosts){
         this.brand = brand;
         this.model = model;
         this.bodyType = bodyType;

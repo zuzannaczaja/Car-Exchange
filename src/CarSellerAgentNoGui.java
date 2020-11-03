@@ -18,6 +18,16 @@ public class CarSellerAgentNoGui extends Agent {
     protected void setup() {
         // Create the catalogue
         catalogue = new Hashtable();
+        Object[] args = getArguments();
+        if (args != null && args.length > 0) {
+        String test = (String) args[0] + " " + (String) args[1]+ " " + (String) args[2]+ " " + (String) args[3]
+                + " " + (String) args[4]+ " " + (String) args[5]+ " " + (String) args[6]+ " " + (String) args[7];
+        System.out.println(test);
+        Car car = new Car((String) args[0], (String) args[1], (String) args[2], (String) args[3],
+                Float.parseFloat((String) args[4]), Integer.parseInt((String) args[5]), Integer.parseInt((String) args[6]), Integer.parseInt((String) args[7]));
+        String brandAndModel = (String) args[0] + " " + (String) args[1];
+        updateCatalogue(brandAndModel, car);
+        }
 
         // Register the car-selling service in the yellow pages
         DFAgentDescription dfd = new DFAgentDescription();
