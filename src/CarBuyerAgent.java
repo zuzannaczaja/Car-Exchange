@@ -27,12 +27,12 @@ public class CarBuyerAgent extends Agent {
             addBehaviour(new TickerBehaviour(this, 10000) {
                 protected void onTick() {
                     System.out.println("Podejmuję próbę kupna "+ targetCar);
-                    DFAgentDescription template = new DFAgentDescription();
-                    ServiceDescription sd = new ServiceDescription();
-                    sd.setType("car-selling");
-                    template.addServices(sd);
+                    DFAgentDescription dfAgentDescription = new DFAgentDescription();
+                    ServiceDescription serviceDescription = new ServiceDescription();
+                    serviceDescription.setType("car-selling");
+                    dfAgentDescription.addServices(serviceDescription);
                     try {
-                        DFAgentDescription[] result = DFService.search(myAgent, template);
+                        DFAgentDescription[] result = DFService.search(myAgent, dfAgentDescription);
                         System.out.println("Wykryto następujących sprzedających:");
                         sellerAgents = new AID[result.length];
                         for (int i = 0; i < result.length; ++i) {
@@ -59,8 +59,8 @@ public class CarBuyerAgent extends Agent {
     private class RequestPerformer extends Behaviour {
         private AID bestSeller;
         private int bestPrice;
-        private int repliesCnt = 0;
-        private MessageTemplate mt;
+        private int repliesCount = 0;
+        private MessageTemplate messageTemplate;
         private int step = 0;
         Object[] args = getArguments();
 
@@ -75,12 +75,12 @@ public class CarBuyerAgent extends Agent {
                     cfp.setConversationId("car-trade");
                     cfp.setReplyWith("cfp"+System.currentTimeMillis());
                     myAgent.send(cfp);
-                    mt = MessageTemplate.and(MessageTemplate.MatchConversationId("car-trade"),
+                    messageTemplate = MessageTemplate.and(MessageTemplate.MatchConversationId("car-trade"),
                             MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));
                     step = 1;
                     break;
                 case 1:
-                    ACLMessage reply = myAgent.receive(mt);
+                    ACLMessage reply = myAgent.receive(messageTemplate);
                     if (reply != null) {
                         if (reply.getPerformative() == ACLMessage.PROPOSE) {
                             int price = Integer.parseInt(reply.getContent());
@@ -92,8 +92,8 @@ public class CarBuyerAgent extends Agent {
                                 System.out.println("Nieudana próba kupna: Budżet kupującego jest zbyt niski.");
                             }
                         }
-                        repliesCnt++;
-                        if (repliesCnt >= sellerAgents.length) {
+                        repliesCount++;
+                        if (repliesCount >= sellerAgents.length) {
                             step = 2;
                         }
                     }
@@ -108,12 +108,12 @@ public class CarBuyerAgent extends Agent {
                     order.setConversationId("car-trade");
                     order.setReplyWith("order"+System.currentTimeMillis());
                     myAgent.send(order);
-                    mt = MessageTemplate.and(MessageTemplate.MatchConversationId("car-trade"),
+                    messageTemplate = MessageTemplate.and(MessageTemplate.MatchConversationId("car-trade"),
                             MessageTemplate.MatchInReplyTo(order.getReplyWith()));
                     step = 3;
                     break;
                 case 3:
-                    reply = myAgent.receive(mt);
+                    reply = myAgent.receive(messageTemplate);
                     if (reply != null) {
                         if (reply.getPerformative() == ACLMessage.INFORM) {
                             System.out.println(targetCar +" został pomyślnie kupiony od: "+reply.getSender().getName());

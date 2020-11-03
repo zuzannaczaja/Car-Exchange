@@ -67,11 +67,11 @@ public class CarSellerAgentNoGui extends Agent {
 
     private class OfferRequestsServer extends CyclicBehaviour {
         public void action() {
-            MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.CFP);
-            ACLMessage msg = myAgent.receive(mt);
-            if (msg != null) {
-                String content = msg.getContent();
-                ACLMessage reply = msg.createReply();
+            MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(ACLMessage.CFP);
+            ACLMessage aclMessage = myAgent.receive(messageTemplate);
+            if (aclMessage != null) {
+                String content = aclMessage.getContent();
+                ACLMessage reply = aclMessage.createReply();
                 Car car = (Car) catalogue.get(content);
                 Integer price = null;
                 if(car != null){
@@ -95,11 +95,11 @@ public class CarSellerAgentNoGui extends Agent {
 
     private class PurchaseOrdersServer extends CyclicBehaviour {
         public void action() {
-            MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL);
-            ACLMessage msg = myAgent.receive(mt);
-            if (msg != null) {
-                String content = msg.getContent();
-                ACLMessage reply = msg.createReply();
+            MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL);
+            ACLMessage aclMessage = myAgent.receive(messageTemplate);
+            if (aclMessage != null) {
+                String content = aclMessage.getContent();
+                ACLMessage reply = aclMessage.createReply();
                 Car car = (Car) catalogue.get(content);
                 Integer price = null;
                 if(car != null){
@@ -109,7 +109,7 @@ public class CarSellerAgentNoGui extends Agent {
                 catalogue.remove(content);
                 if (price != null) {
                     reply.setPerformative(ACLMessage.INFORM);
-                    System.out.println(content+" sprzedany agentowi "+msg.getSender().getName());
+                    System.out.println(content+" sprzedany agentowi "+aclMessage.getSender().getName());
                 }
                 else {
                     // The requested book has been sold to another buyer in the meanwhile .

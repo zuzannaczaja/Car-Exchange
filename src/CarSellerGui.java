@@ -85,7 +85,6 @@ class CarSellerGui extends JFrame {
                 myAgent.doDelete();
             }
         } );
-
         setResizable(false);
     }
 

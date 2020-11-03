@@ -20,14 +20,14 @@ public class CarSellerAgent extends Agent {
         myGui = new CarSellerGui(this);
         myGui.showGui();
 
-        DFAgentDescription dfd = new DFAgentDescription();
-        dfd.setName(getAID());
-        ServiceDescription sd = new ServiceDescription();
-        sd.setType("car-selling");
-        sd.setName("JADE-car-trading");
-        dfd.addServices(sd);
+        DFAgentDescription dfAgentDescription = new DFAgentDescription();
+        dfAgentDescription.setName(getAID());
+        ServiceDescription serviceDescription = new ServiceDescription();
+        serviceDescription.setType("car-selling");
+        serviceDescription.setName("JADE-car-trading");
+        dfAgentDescription.addServices(serviceDescription);
         try {
-            DFService.register(this, dfd);
+            DFService.register(this, dfAgentDescription);
         }
         catch (FIPAException fe) {
             fe.printStackTrace();
@@ -61,11 +61,11 @@ public class CarSellerAgent extends Agent {
 
     private class OfferRequestsServer extends CyclicBehaviour {
         public void action() {
-            MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.CFP);
-            ACLMessage msg = myAgent.receive(mt);
-            if (msg != null) {
-                String content = msg.getContent();
-                ACLMessage reply = msg.createReply();
+            MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(ACLMessage.CFP);
+            ACLMessage aclMessage = myAgent.receive(messageTemplate);
+            if (aclMessage != null) {
+                String content = aclMessage.getContent();
+                ACLMessage reply = aclMessage.createReply();
                 Car car = (Car) carCatalogue.get(content);
                 Integer price = null;
                 if(car != null){
@@ -89,18 +89,18 @@ public class CarSellerAgent extends Agent {
 
     private class PurchaseOrdersServer extends CyclicBehaviour {
         public void action() {
-            MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL);
-            ACLMessage msg = myAgent.receive(mt);
-            if (msg != null) {
-                String content = msg.getContent();
-                ACLMessage reply = msg.createReply();
+            MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL);
+            ACLMessage aclMessage = myAgent.receive(messageTemplate);
+            if (aclMessage != null) {
+                String content = aclMessage.getContent();
+                ACLMessage reply = aclMessage.createReply();
 
                 Car car = (Car) carCatalogue.get(content);
                 Integer price = (Integer) car.getTotalPrice();
                 carCatalogue.remove(content);
                 if (price != null) {
                     reply.setPerformative(ACLMessage.INFORM);
-                    System.out.println(content+" sprzedany agentowi "+msg.getSender().getName());
+                    System.out.println(content+" sprzedany agentowi "+aclMessage.getSender().getName());
                 }
                 else {
                     reply.setPerformative(ACLMessage.FAILURE);
