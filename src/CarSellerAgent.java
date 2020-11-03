@@ -6,7 +6,6 @@ import jade.domain.DFService;
 import jade.domain.FIPAException;							 
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
-import jade.lang.acl.UnreadableException;
 
 
 import java.util.*;
@@ -68,8 +67,10 @@ public class CarSellerAgent extends Agent {
     public void updateCatalogue(final String brandAndModel, final Car car) {
         addBehaviour(new OneShotBehaviour() {
             public void action() {
-                catalogue.put(brandAndModel, car);
-                System.out.println(brandAndModel + " został dodany do katalogu. Cena = " + car.getTotalPrice());
+
+                addBehaviour(createSellingCarBehaviour(brandAndModel, car));
+               // catalogue.put(brandAndModel, car);
+               // System.out.println(brandAndModel + " został dodany do katalogu. Cena = " + car.getTotalPrice());
             }
         } );
     }
@@ -133,6 +134,17 @@ public class CarSellerAgent extends Agent {
                 block();
             }
         }
+    }
+
+    private OneShotBehaviour createSellingCarBehaviour(final String brandAndModel, final Car car) {
+        return new OneShotBehaviour() {
+            private static final long serialVersionUID = 1L;
+
+            public void action() {
+                catalogue.put(brandAndModel, car);
+                System.out.println(brandAndModel + " został dodany do katalogu. Cena = " + car.getTotalPrice());
+            }
+        };
     }
 }
 
