@@ -69,7 +69,7 @@ public class CarSellerAgent extends Agent {
         addBehaviour(new OneShotBehaviour() {
             public void action() {
                 catalogue.put(brandAndModel, car);
-                System.out.println(brandAndModel + " został dodany do katalogu. Cena = " + car.getTotalPrice());
+                System.out.println(getAID().getName() + ": " + brandAndModel + " został dodany do katalogu. Cena = " + car.getTotalPrice());
             }
         } );
     }
