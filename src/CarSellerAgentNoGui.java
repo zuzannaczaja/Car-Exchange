@@ -70,9 +70,9 @@ public class CarSellerAgentNoGui extends Agent {
             MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.CFP);
             ACLMessage msg = myAgent.receive(mt);
             if (msg != null) {
-                String brand = msg.getContent();
+                String content = msg.getContent();
                 ACLMessage reply = msg.createReply();
-                Car car = (Car) catalogue.get(brand);
+                Car car = (Car) catalogue.get(content);
                 Integer price = null;
                 if(car != null){
                     price = car.getTotalPrice();
@@ -98,20 +98,18 @@ public class CarSellerAgentNoGui extends Agent {
             MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL);
             ACLMessage msg = myAgent.receive(mt);
             if (msg != null) {
-                String brand = msg.getContent();
+                String content = msg.getContent();
                 ACLMessage reply = msg.createReply();
-
-                Car car = (Car) catalogue.get(brand);
-
+                Car car = (Car) catalogue.get(content);
                 Integer price = null;
                 if(car != null){
 
                     price = car.getTotalPrice();
                 }
-                catalogue.remove(brand);
+                catalogue.remove(content);
                 if (price != null) {
                     reply.setPerformative(ACLMessage.INFORM);
-                    System.out.println(brand+" sprzedany agentowi "+msg.getSender().getName());
+                    System.out.println(content+" sprzedany agentowi "+msg.getSender().getName());
                 }
                 else {
                     // The requested book has been sold to another buyer in the meanwhile .

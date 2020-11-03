@@ -64,9 +64,9 @@ public class CarSellerAgent extends Agent {
             MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.CFP);
             ACLMessage msg = myAgent.receive(mt);
             if (msg != null) {
-                String brand = msg.getContent();
+                String content = msg.getContent();
                 ACLMessage reply = msg.createReply();
-                Car car = (Car) carCatalogue.get(brand);
+                Car car = (Car) carCatalogue.get(content);
                 Integer price = null;
                 if(car != null){
                     price = car.getTotalPrice();
@@ -92,15 +92,15 @@ public class CarSellerAgent extends Agent {
             MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL);
             ACLMessage msg = myAgent.receive(mt);
             if (msg != null) {
-                String brand = msg.getContent();
+                String content = msg.getContent();
                 ACLMessage reply = msg.createReply();
 
-                Car car = (Car) carCatalogue.get(brand);
+                Car car = (Car) carCatalogue.get(content);
                 Integer price = (Integer) car.getTotalPrice();
-                carCatalogue.remove(brand);
+                carCatalogue.remove(content);
                 if (price != null) {
                     reply.setPerformative(ACLMessage.INFORM);
-                    System.out.println(brand+" sprzedany agentowi "+msg.getSender().getName());
+                    System.out.println(content+" sprzedany agentowi "+msg.getSender().getName());
                 }
                 else {
                     reply.setPerformative(ACLMessage.FAILURE);
