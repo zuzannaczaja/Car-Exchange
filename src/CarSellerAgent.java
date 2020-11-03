@@ -11,21 +11,15 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import java.util.*;
 
 public class CarSellerAgent extends Agent {
-    // The catalogue of books for sale (maps the title of a book to its price)
-    private Hashtable catalogue;
-    // The GUI by means of which the user can add books in the catalogue
+
+    private Hashtable carCatalogue;
     private CarSellerGui myGui;
 
-    // Put agent initializations here
     protected void setup() {
-        // Create the catalogue
-        catalogue = new Hashtable();
+        carCatalogue = new Hashtable();
+        myGui = new CarSellerGui(this);
+        myGui.showGui();
 
-        // Create and show the GUI
-            myGui = new CarSellerGui(this);
-            myGui.showGui();
-
-        // Register the car-selling service in the yellow pages
         DFAgentDescription dfd = new DFAgentDescription();
         dfd.setName(getAID());
         ServiceDescription sd = new ServiceDescription();
@@ -39,25 +33,18 @@ public class CarSellerAgent extends Agent {
             fe.printStackTrace();
         }
 
-        // Add the behaviour serving queries from buyer agents
         addBehaviour(new OfferRequestsServer());
-
-        // Add the behaviour serving purchase orders from buyer agents
         addBehaviour(new PurchaseOrdersServer());
     }
 
-    // Put agent clean-up operations here
     protected void takeDown() {
-        // Deregister from the yellow pages
         try {
             DFService.deregister(this);
         }
         catch (FIPAException fe) {
             fe.printStackTrace();
         }
-        // Close the GUI
         myGui.dispose();
-        // Printout a dismissal message
         System.out.println("Agent sprzedający "+getAID().getName()+" kończy działanie.");
     }
 
@@ -79,7 +66,7 @@ public class CarSellerAgent extends Agent {
             if (msg != null) {
                 String brand = msg.getContent();
                 ACLMessage reply = msg.createReply();
-                Car car = (Car) catalogue.get(brand);
+                Car car = (Car) carCatalogue.get(brand);
                 Integer price = null;
                 if(car != null){
                     price = car.getTotalPrice();
@@ -105,20 +92,17 @@ public class CarSellerAgent extends Agent {
             MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL);
             ACLMessage msg = myAgent.receive(mt);
             if (msg != null) {
-                // ACCEPT_PROPOSAL Message received. Process it
                 String brand = msg.getContent();
                 ACLMessage reply = msg.createReply();
 
-                Car car = (Car) catalogue.get(brand);
-                //price = car.getBasePrice();
+                Car car = (Car) carCatalogue.get(brand);
                 Integer price = (Integer) car.getTotalPrice();
-                catalogue.remove(brand);
+                carCatalogue.remove(brand);
                 if (price != null) {
                     reply.setPerformative(ACLMessage.INFORM);
                     System.out.println(brand+" sprzedany agentowi "+msg.getSender().getName());
                 }
                 else {
-                    // The requested book has been sold to another buyer in the meanwhile .
                     reply.setPerformative(ACLMessage.FAILURE);
                     reply.setContent("not-available");
                 }
@@ -135,7 +119,7 @@ public class CarSellerAgent extends Agent {
             private static final long serialVersionUID = 1L;
 
             public void action() {
-                catalogue.put(brandAndModel, car);
+                carCatalogue.put(brandAndModel, car);
                 System.out.println(brandAndModel + " został dodany do katalogu. Cena = " + car.getTotalPrice());
             }
         };
