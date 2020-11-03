@@ -85,8 +85,7 @@ public class CarSellerAgent extends Agent {
                 Car car = (Car) catalogue.get(brand);
                 Integer price = null;
                 if(car != null){
-                    System.out.println("DEBUG " + car.getBasePrice());
-                    price = car.getBasePrice();
+                    price = car.getTotalPrice();
                 }
                 if (price != null) {
                     // The requested book is available for sale. Reply with the price
@@ -117,7 +116,7 @@ public class CarSellerAgent extends Agent {
 
                 Car car = (Car) catalogue.get(brand);
                 //price = car.getBasePrice();
-                Integer price = (Integer) car.getBasePrice();
+                Integer price = (Integer) car.getTotalPrice();
                 catalogue.remove(brand);
                 if (price != null) {
                     reply.setPerformative(ACLMessage.INFORM);
