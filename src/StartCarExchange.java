@@ -41,7 +41,7 @@ public class StartCarExchange extends Agent {
     private static final int ADDITIONAL_COSTS_MAX = 10000;
     //endregion
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         StringBuilder agentList = new StringBuilder();
         agentList.append(createSellerAgents());
         agentList.append(createBuyerAgents());
@@ -49,11 +49,11 @@ public class StartCarExchange extends Agent {
         BootFromContainer(agentList);
     }
 
-    private static StringBuilder createSellerAgents(){
+    private static StringBuilder createSellerAgents() {
         StringBuilder agentList = new StringBuilder();
         System.out.println("SELLERS: ");
-        for (int i = 0; i < SELLERS_COUNT; i++){
-            for (int y = 0; y < SELLERS_CARS; y++){
+        for (int i = 0; i < SELLERS_COUNT; i++) {
+            for (int y = 0; y < SELLERS_CARS; y++) {
                 agentList.append(SELLER_NAME);
                 agentList.append(i + 1);
                 //agentList.append(SELLER_PACKGAE + ";");
@@ -73,11 +73,11 @@ public class StartCarExchange extends Agent {
         return agentList;
     }
 
-    private static StringBuilder createBuyerAgents(){
+    private static StringBuilder createBuyerAgents() {
         StringBuilder agentList = new StringBuilder();
         System.out.println("BUYERS: ");
-        for (int i = 0; i < BUYERS_COUNT; i++){
-            for (int y = 0; y < BUYERS_CARS; y++){
+        for (int i = 0; i < BUYERS_COUNT; i++) {
+            for (int y = 0; y < BUYERS_CARS; y++) {
                 agentList.append(BUYER_NAME);
                 agentList.append(i + 1);
                 agentList.append(BUYER_PACKGAE + "(");
@@ -91,7 +91,7 @@ public class StartCarExchange extends Agent {
         return agentList;
     }
 
-    private static void BootFromContainer(StringBuilder agentList){
+    private static void BootFromContainer(StringBuilder agentList) {
         String[] container = {
                 "-gui",
                 "-local-host 127.0.0.1",
@@ -101,27 +101,27 @@ public class StartCarExchange extends Agent {
         Boot.main(container);
     }
 
-    private static String generateCars(String[] list){
-        Random r=new Random();
+    private static String generateCars(String[] list) {
+        Random r = new Random();
         int id = r.nextInt(list.length);
-        if(list[id].contains("|"))
+        if (list[id].contains("|"))
             return list[id].replace("|", ", ") + ", ";
         else
             return list[id] + ", ";
     }
 
-    private static String generateRandomFloat(float min, float max){
+    private static String generateRandomFloat(float min, float max) {
         Random r = new Random();
         float randomFloat = min + r.nextFloat() * (max - min);
         int scale = (int) Math.pow(10, 1);
-        float roundedFloat = ((float)Math.round(randomFloat * scale) / scale);
+        float roundedFloat = ((float) Math.round(randomFloat * scale) / scale);
         return roundedFloat + ", ";
     }
 
-    private static String generateRandomInt(int min, int max, boolean coma){
+    private static String generateRandomInt(int min, int max, boolean coma) {
         Random r = new Random();
-        int randomInt = r.nextInt(max-min+1)+min;
-        if(coma)
+        int randomInt = r.nextInt(max - min + 1) + min;
+        if (coma)
             return randomInt + ", ";
         else
             return String.valueOf(randomInt);

@@ -16,17 +16,17 @@ public class CarBuyerAgent extends Agent {
 
     protected void setup() {
 
-        System.out.println("Witaj świecie! Agent kupujący "+getAID().getName()+" jest gotowy.");
+        System.out.println("Witaj świecie! Agent kupujący " + getAID().getName() + " jest gotowy.");
 
         Object[] args = getArguments();
         if (args != null && args.length > 0) {
 
             targetCar = (String) args[0] + " " + (String) args[1];
-            System.out.println("Poszukiwany samochód to: "+ targetCar);
+            System.out.println("Poszukiwany samochód to: " + targetCar);
 
             addBehaviour(new TickerBehaviour(this, 10000) {
                 protected void onTick() {
-                    System.out.println("Podejmuję próbę kupna "+ targetCar);
+                    System.out.println("Podejmuję próbę kupna " + targetCar);
                     DFAgentDescription dfAgentDescription = new DFAgentDescription();
                     ServiceDescription serviceDescription = new ServiceDescription();
                     serviceDescription.setType("car-selling");
@@ -39,13 +39,12 @@ public class CarBuyerAgent extends Agent {
                             sellerAgents[i] = result[i].getName();
                             //System.out.println(sellerAgents[i].getName());
                         }
-                    }
-                    catch (FIPAException fe) {
+                    } catch (FIPAException fe) {
                         fe.printStackTrace();
                     }
                     myAgent.addBehaviour(new RequestPerformer());
                 }
-            } );
+            });
         } else {
             System.out.println("Agent kupujący nie ma określonego samochodu!");
             doDelete();
@@ -53,7 +52,7 @@ public class CarBuyerAgent extends Agent {
     }
 
     protected void takeDown() {
-        System.out.println("Agent kupujący "+getAID().getName()+" kończy działanie.");
+        System.out.println("Agent kupujący " + getAID().getName() + " kończy działanie.");
     }
 
     private class RequestPerformer extends Behaviour {
@@ -73,7 +72,7 @@ public class CarBuyerAgent extends Agent {
                     }
                     cfp.setContent(targetCar);
                     cfp.setConversationId("car-trade");
-                    cfp.setReplyWith("cfp"+System.currentTimeMillis());
+                    cfp.setReplyWith("cfp" + System.currentTimeMillis());
                     myAgent.send(cfp);
                     messageTemplate = MessageTemplate.and(MessageTemplate.MatchConversationId("car-trade"),
                             MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));
@@ -88,7 +87,7 @@ public class CarBuyerAgent extends Agent {
                                 bestPrice = price;
                                 bestSeller = reply.getSender();
                             }
-                            if(price > Integer.parseInt((String) args[2])){
+                            if (price > Integer.parseInt((String) args[2])) {
                                 System.out.println("Nieudana próba kupna: Budżet kupującego jest zbyt niski.");
                             }
                         }
@@ -96,8 +95,7 @@ public class CarBuyerAgent extends Agent {
                         if (repliesCount >= sellerAgents.length) {
                             step = 2;
                         }
-                    }
-                    else {
+                    } else {
                         block();
                     }
                     break;
@@ -106,7 +104,7 @@ public class CarBuyerAgent extends Agent {
                     order.addReceiver(bestSeller);
                     order.setContent(targetCar);
                     order.setConversationId("car-trade");
-                    order.setReplyWith("order"+System.currentTimeMillis());
+                    order.setReplyWith("order" + System.currentTimeMillis());
                     myAgent.send(order);
                     messageTemplate = MessageTemplate.and(MessageTemplate.MatchConversationId("car-trade"),
                             MessageTemplate.MatchInReplyTo(order.getReplyWith()));
@@ -116,19 +114,17 @@ public class CarBuyerAgent extends Agent {
                     reply = myAgent.receive(messageTemplate);
                     if (reply != null) {
                         if (reply.getPerformative() == ACLMessage.INFORM) {
-                            System.out.println(targetCar +" został pomyślnie kupiony od: "+reply.getSender().getName());
-                            System.out.println("Cena = "+bestPrice);
+                            System.out.println(targetCar + " został pomyślnie kupiony od: " + reply.getSender().getName());
+                            System.out.println("Cena = " + bestPrice);
                             int budget = Integer.parseInt((String) args[2]) - bestPrice;
                             args[2] = Integer.toString(budget);
                             System.out.println("Budżet " + getAID().getName() + " wynosi teraz: " + args[2]);
                             myAgent.doDelete();
-                        }
-                        else {
+                        } else {
                             System.out.println("Nieudana próba kupna: wybrany samochód jest już sprzedany.");
                         }
                         step = 4;
-                    }
-                    else {
+                    } else {
                         block();
                     }
                     break;
@@ -137,7 +133,7 @@ public class CarBuyerAgent extends Agent {
 
         public boolean done() {
             if (step == 2 && bestSeller == null) {
-                System.out.println("Nieudana próba kupna: "+ targetCar +" nie jest dostępny na sprzedaż");
+                System.out.println("Nieudana próba kupna: " + targetCar + " nie jest dostępny na sprzedaż");
             }
             return ((step == 2 && bestSeller == null) || step == 4);
         }

@@ -1,18 +1,21 @@
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 class CarSellerGui extends JFrame {
-    private CarSellerAgent myAgent;
+    private final CarSellerAgent myAgent;
 
-    private JTextField brandField;
-    private JTextField modelField;
-    private JTextField bodyTypeField;
-    private JTextField engineTypeField;
-    private JTextField engineCapacityField;
-    private JTextField yearsOfProductionField;
-    private JTextField basicPriceField;
-    private JTextField additionalCostsField;
+    private final JTextField brandField;
+    private final JTextField modelField;
+    private final JTextField bodyTypeField;
+    private final JTextField engineTypeField;
+    private final JTextField engineCapacityField;
+    private final JTextField yearsOfProductionField;
+    private final JTextField basicPriceField;
+    private final JTextField additionalCostsField;
 
     CarSellerGui(CarSellerAgent a) {
         super(a.getLocalName());
@@ -48,7 +51,7 @@ class CarSellerGui extends JFrame {
         getContentPane().add(p, BorderLayout.CENTER);
 
         JButton addButton = new JButton("Add");
-        addButton.addActionListener( new ActionListener() {
+        addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 try {
                     String brand = brandField.getText().trim();
@@ -70,29 +73,28 @@ class CarSellerGui extends JFrame {
                     yearsOfProductionField.setText("");
                     basicPriceField.setText("");
                     additionalCostsField.setText("");
-                }
-                catch (Exception e) {
-                    JOptionPane.showMessageDialog(CarSellerGui.this, "Invalid values. "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(CarSellerGui.this, "Invalid values. " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
-        } );
+        });
         p = new JPanel();
         p.add(addButton);
         getContentPane().add(p, BorderLayout.SOUTH);
 
-        addWindowListener(new	WindowAdapter() {
+        addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 myAgent.doDelete();
             }
-        } );
+        });
         setResizable(false);
     }
 
     public void showGui() {
         pack();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int centerX = (int)screenSize.getWidth() / 2;
-        int centerY = (int)screenSize.getHeight() / 2;
+        int centerX = (int) screenSize.getWidth() / 2;
+        int centerY = (int) screenSize.getHeight() / 2;
         setLocation(centerX - getWidth() / 2, centerY - getHeight() / 2);
         super.setVisible(true);
     }
