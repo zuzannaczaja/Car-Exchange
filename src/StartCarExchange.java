@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class StartCarExchange extends Agent {
     //region Ilość agentów
-    private static final int BUYERS_COUNT = 1;
+    private static final int BUYERS_COUNT = 2;
     private static final int SELLERS_COUNT = 10;
     private static final int SELLERS_CARS = 2;
     private static final int BUYERS_CARS = 2;
@@ -56,7 +56,6 @@ public class StartCarExchange extends Agent {
             for (int y = 0; y < SELLERS_CARS; y++) {
                 agentList.append(SELLER_NAME);
                 agentList.append(i + 1);
-                //agentList.append(SELLER_PACKGAE + ";");
                 agentList.append(SELLER_PACKGAE + "(");
                 agentList.append(generateCars(carList));
                 agentList.append(generateCars(bodyTypeList));
@@ -77,19 +76,21 @@ public class StartCarExchange extends Agent {
         StringBuilder agentList = new StringBuilder();
         System.out.println("BUYERS: ");
         for (int i = 0; i < BUYERS_COUNT; i++) {
+            agentList.append(BUYER_NAME);
+            agentList.append(i + 1);
+            agentList.append(BUYER_PACKGAE + "(");
             for (int y = 0; y < BUYERS_CARS; y++) {
-                agentList.append(BUYER_NAME);
-                agentList.append(i + 1);
-                agentList.append(BUYER_PACKGAE + "(");
-                agentList.append(generateCars(carList));
-                agentList.append(100000);
-                agentList.append(");");
+                agentList.append(generateCarsTest(carList));
+                //agentList.append(100000);
+                if(y + 1 != BUYERS_CARS)
+                    agentList.append(",");
             }
+            agentList.append(");");
         }
 
         System.out.println(agentList);
-        String temp = String.valueOf(agentList);
-        System.out.println(temp.replace(";", "\n"));
+        //String temp = String.valueOf(agentList);
+        //System.out.println(temp.replace(";", "\n"));
         return agentList;
     }
 
@@ -112,6 +113,17 @@ public class StartCarExchange extends Agent {
         }
         else
             return list[id] + ", ";
+    }
+
+    private static String generateCarsTest(String[] list) {
+        Random r = new Random();
+        int id = r.nextInt(list.length);
+        if (list[id].contains("|")) {
+            System.out.println(list[id]);
+            return list[id].replace("|", " ");
+        }
+        else
+            return list[id];
     }
 
     private static String generateRandomFloat(float min, float max) {
