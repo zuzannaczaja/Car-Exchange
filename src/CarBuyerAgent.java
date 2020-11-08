@@ -20,6 +20,7 @@ public class CarBuyerAgent extends Agent {
     public static HashMap<String, Integer> allCars = new HashMap<>();
     private List<String> wantedCarsBuyer = new ArrayList<>();
     int carIndex;
+    int budgetBuyer;
 
     protected void setup() {
 
@@ -105,11 +106,12 @@ public class CarBuyerAgent extends Agent {
                     if (reply != null) {
                         if (reply.getPerformative() == ACLMessage.PROPOSE) {
                             int price = Integer.parseInt(reply.getContent());
-                            if ((bestSeller == null || price < bestPrice) && price <= Integer.parseInt((String) args[2])) {
+                            if ((bestSeller == null || price < bestPrice) && price <= budgetBuyer) {
                                 bestPrice = price;
                                 bestSeller = reply.getSender();
                             }
-                            if (price > Integer.parseInt((String) args[2])) {
+                            if (price > budgetBuyer) {
+                                System.out.println(price + "   " + budgetBuyer);
                                 System.out.println("Nieudana próba kupna: Budżet kupującego jest zbyt niski.");
                             }
                         }
@@ -138,11 +140,10 @@ public class CarBuyerAgent extends Agent {
                         if (reply.getPerformative() == ACLMessage.INFORM) {
                             System.out.println(targetCar + " został pomyślnie kupiony od: " + reply.getSender().getName());
                             System.out.println("Cena = " + bestPrice);
-                            int budget = Integer.parseInt((String) args[2]) - bestPrice;
-                            args[2] = Integer.toString(budget);
-                            System.out.println("Budżet " + getAID().getName() + " wynosi teraz: " + args[2]);
+                            budgetBuyer  = budgetBuyer - bestPrice;
+                            System.out.println("Budżet " + getAID().getName() + " wynosi teraz: " + budgetBuyer);
 
-                            if(CarBuyerAgent.allCars.get(getAID().getLocalName()) <= 0 || budget <= 0){
+                            if(CarBuyerAgent.allCars.get(getAID().getLocalName()) <= 0 || budgetBuyer <= 0){
                                 wantedCarsBuyer.remove(carIndex);
                                 allCars.computeIfPresent(getAID().getLocalName(), (k, cars) -> cars - 1);
                                 doDelete();

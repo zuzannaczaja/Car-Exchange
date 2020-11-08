@@ -6,7 +6,7 @@ import java.util.Random;
 public class StartCarExchange extends Agent {
     //region Ilość agentów
     private static final int BUYERS_COUNT = 2;
-    private static final int SELLERS_COUNT = 10;
+    private static final int SELLERS_COUNT = 2;
     private static final int SELLERS_CARS = 2;
     private static final int BUYERS_CARS = 2;
     //endregion
