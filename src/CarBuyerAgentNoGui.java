@@ -14,23 +14,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-public class CarBuyerAgent extends Agent {
+public class CarBuyerAgentNoGui extends Agent {
 
     private String targetCar;
     private AID[] sellerAgents;
     public static HashMap<String, Integer> allCars = new HashMap<>();
-    public List<String> wantedCarsBuyer = new ArrayList<>();
+    private List<String> wantedCarsBuyer = new ArrayList<>();
     int carIndex;
     int budgetBuyer = 100000;
-    private CarBuyerGui myGui;
-    public boolean isDelayed = true;
 
     protected void setup() {
 
-        myGui = new CarBuyerGui(this);
-        myGui.showGui();
-
         System.out.println("Witaj świecie! Agent kupujący " + getAID().getName() + " jest gotowy.");
+
+        Object[] args = getArguments();
+        if (args != null && args.length > 0) {
+
+            for(Object car : args){
+                String carName = car.toString().trim();
+                wantedCarsBuyer.add(carName);
+            }
 
             allCars.put(getAID().getLocalName(), wantedCarsBuyer.size());
 
@@ -66,28 +69,14 @@ public class CarBuyerAgent extends Agent {
                     myAgent.addBehaviour(new RequestPerformer());
                 }
             });
+        } else {
+            System.out.println("Agent kupujący nie ma określonego samochodu!");
+            //doDelete();
+        }
     }
 
     protected void takeDown() {
         System.out.println("Agent kupujący " + getAID().getName() + " kończy działanie.");
-        myGui.dispose();
-    }
-
-    public void updateData(String brandAndModel, String reservation){
-
-        wantedCarsBuyer.add(brandAndModel);
-        System.out.println(wantedCarsBuyer.size());
-        allCars.put(getAID().getLocalName(), wantedCarsBuyer.size());
-        System.out.println(getAID().getLocalName());
-        System.out.println(allCars.get(getAID().getLocalName()));
-
-
-        if(reservation == "yes" || reservation == "Yes"){
-            isDelayed = true;
-        } else if(reservation == "no" || reservation == "No"){
-            isDelayed = false;
-        }
-
     }
 
     private class RequestPerformer extends Behaviour {
@@ -135,7 +124,7 @@ public class CarBuyerAgent extends Agent {
                     break;
                 case 2:
                     Random random = new Random();
-
+                    boolean isDelayed = random.nextBoolean();
                     ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
                     if(isDelayed){
                         System.out.println(getAID().getLocalName() + " prosi o rezerwację samochodu.");
@@ -192,3 +181,4 @@ public class CarBuyerAgent extends Agent {
         }
     }
 }
+

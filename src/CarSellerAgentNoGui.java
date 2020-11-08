@@ -153,7 +153,7 @@ public class CarSellerAgentNoGui extends Agent {
             if (aclMessage != null) {
                 System.out.println("Rozpoczynam rezerwację samochodu.");
                 double mili = System.currentTimeMillis();
-                while(System.currentTimeMillis() < mili+10000){
+                while(System.currentTimeMillis() < mili+5000){
                     //System.out.println("CZEKAM");
                     String opoznienie = ",";
                 }

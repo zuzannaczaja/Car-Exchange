@@ -14,7 +14,7 @@ public class StartCarExchange extends Agent {
     private static final String SELLER_NAME = "Seller";
     private static final String BUYER_NAME = "Buyer";
     private static final String SELLER_PACKGAE = ":CarSellerAgentNoGui";
-    private static final String BUYER_PACKGAE = ":CarBuyerAgent";
+    private static final String BUYER_PACKGAE = ":CarBuyerAgentNoGui";
     //endregion
     //region Listy i wartości
     private static final String[] carList = {
