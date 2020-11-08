@@ -57,9 +57,9 @@ public class StartCarExchange extends Agent {
             agentList.append(i + 1);
             agentList.append(SELLER_PACKGAE + "(");
             for (int y = 0; y < SELLERS_CARS; y++) {
-                agentList.append(generateCars(carList) + "-");
-                agentList.append(generateCars(bodyTypeList) + "-");
-                agentList.append(generateCars(engineTypeList) + "-");
+                agentList.append(generateCars(carList, true));
+                agentList.append(generateCars(bodyTypeList, true));
+                agentList.append(generateCars(engineTypeList, true));
                 agentList.append(generateRandomFloat(ENGINE_CAPACITY_MIN, ENGINE_CAPACITY_MAX) + "-");
                 agentList.append(generateRandomInt(YEAR_OF_PRODUCTION_MIN, YEAR_OF_PRODUCTION_MAX) + "-");
                 agentList.append(generateRandomInt(BASE_PRICE_MIN, BASE_PRICE_MAX) + "-");
@@ -82,7 +82,7 @@ public class StartCarExchange extends Agent {
             agentList.append(i + 1);
             agentList.append(BUYER_PACKGAE + "(");
             for (int y = 0; y < BUYERS_CARS; y++) {
-                agentList.append(generateCars(carList));
+                agentList.append(generateCars(carList, false));
                 //agentList.append(100000);
                 if(y + 1 != BUYERS_CARS)
                     agentList.append(",");
@@ -106,13 +106,17 @@ public class StartCarExchange extends Agent {
         Boot.main(container);
     }
 
-    private static String generateCars(String[] list) {
+    private static String generateCars(String[] list, boolean dash) {
         Random r = new Random();
         int id = r.nextInt(list.length);
         if (list[id].contains("|")) {
             System.out.println(list[id]);
-            return list[id].replace("|", "-");
+            if (dash)
+                return list[id].replace("|", "-") + "-";
+            else return list[id].replace("|", " ");
         }
+        else if (!list[id].contains("|") && dash)
+            return list[id] + "-";
         else
             return list[id];
     }
