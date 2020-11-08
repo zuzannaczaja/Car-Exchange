@@ -111,7 +111,7 @@ public class StartCarExchange extends Agent {
         int id = r.nextInt(list.length);
         if (list[id].contains("|")) {
             System.out.println(list[id]);
-            return list[id].replace("|", " ");
+            return list[id].replace("|", "-");
         }
         else
             return list[id];

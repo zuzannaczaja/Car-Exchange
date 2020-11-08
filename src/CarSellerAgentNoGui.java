@@ -8,6 +8,7 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
+import java.util.HashMap;
 import java.util.Hashtable;
 
 public class CarSellerAgentNoGui extends Agent {
@@ -16,15 +17,35 @@ public class CarSellerAgentNoGui extends Agent {
 
     protected void setup() {
         catalogue = new Hashtable();
+
         Object[] args = getArguments();
+
         if (args != null && args.length > 0) {
-            //String test = (String) args[0] + " " + (String) args[1]+ " " + (String) args[2]+ " " + (String) args[3]
-            //        + " " + (String) args[4]+ " " + (String) args[5]+ " " + (String) args[6]+ " " + (String) args[7];
-            //System.out.println(test);
-            Car car = new Car((String) args[0], (String) args[1], (String) args[2], (String) args[3],
-                    Float.parseFloat((String) args[4]), Integer.parseInt((String) args[5]), Integer.parseInt((String) args[6]), Integer.parseInt((String) args[7]));
-            String brandAndModel = (String) args[0] + " " + (String) args[1];
-            updateCatalogue(brandAndModel, car);
+
+            String brand;
+            String model;
+            String bodyType;
+            String engineType;
+            float engineCapacity;
+            int yearOfProduction;
+            int basePrice;
+            int additionalCosts;
+
+            for(Object o : args) {
+                String[] s = ((String)o).split("-");
+                brand = s[0].toString();
+                model = s[1].toString();
+                bodyType = s[2].toString();
+                engineType = s[3].toString();
+                engineCapacity = Float.parseFloat(s[4]);
+                yearOfProduction = Integer.parseInt(s[5]);
+                basePrice = Integer.parseInt(s[6]);
+                additionalCosts = Integer.parseInt(s[7]);
+
+                Car car = new Car(brand, model, bodyType, engineType, engineCapacity, yearOfProduction, basePrice, additionalCosts);
+                String brandAndModel = s[0] + " " + s[1];
+                updateCatalogue(brandAndModel, car);
+            }
         }
 
         DFAgentDescription dfd = new DFAgentDescription();

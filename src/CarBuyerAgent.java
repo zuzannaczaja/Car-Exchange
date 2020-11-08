@@ -20,7 +20,7 @@ public class CarBuyerAgent extends Agent {
     public static HashMap<String, Integer> allCars = new HashMap<>();
     private List<String> wantedCarsBuyer = new ArrayList<>();
     int carIndex;
-    int budgetBuyer;
+    int budgetBuyer = 100000;
 
     protected void setup() {
 
