@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class StartCarExchange extends Agent {
     //region Ilość agentów
-    private static final int BUYERS_COUNT = 4;
+    private static final int BUYERS_COUNT = 1;
     private static final int SELLERS_COUNT = 10;
     private static final int SELLERS_CARS = 2;
     private static final int BUYERS_CARS = 2;
@@ -86,6 +86,8 @@ public class StartCarExchange extends Agent {
                 agentList.append(");");
             }
         }
+
+        System.out.println(agentList);
         String temp = String.valueOf(agentList);
         System.out.println(temp.replace(";", "\n"));
         return agentList;
@@ -104,8 +106,10 @@ public class StartCarExchange extends Agent {
     private static String generateCars(String[] list) {
         Random r = new Random();
         int id = r.nextInt(list.length);
-        if (list[id].contains("|"))
+        if (list[id].contains("|")) {
+            System.out.println(list[id]);
             return list[id].replace("|", ", ") + ", ";
+        }
         else
             return list[id] + ", ";
     }

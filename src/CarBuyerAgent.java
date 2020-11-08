@@ -9,10 +9,17 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 public class CarBuyerAgent extends Agent {
 
     private String targetCar;
     private AID[] sellerAgents;
+    public static HashMap<String, Integer> allCars = new HashMap<>();
+    private List<String> wantedCarsBuyer = new ArrayList<>();
+    int carIndex;
 
     protected void setup() {
 
@@ -21,7 +28,22 @@ public class CarBuyerAgent extends Agent {
         Object[] args = getArguments();
         if (args != null && args.length > 0) {
 
-            targetCar = (String) args[0] + " " + (String) args[1];
+            int counter = 1;
+
+            for(Object car : args){
+                String carName = car.toString().trim();
+
+                System.out.println(" > " + counter + ".) " + carName);
+                wantedCarsBuyer.add(carName);
+                counter++;
+
+            }
+
+            allCars.put(getAID().getLocalName(), wantedCarsBuyer.size());
+
+            carIndex = CarBuyerAgent.allCars.get(getAID().getLocalName()) - 1;
+
+            targetCar = wantedCarsBuyer.get(carIndex);
             System.out.println("Poszukiwany samochód to: " + targetCar);
 
             addBehaviour(new TickerBehaviour(this, 10000) {
@@ -47,7 +69,7 @@ public class CarBuyerAgent extends Agent {
             });
         } else {
             System.out.println("Agent kupujący nie ma określonego samochodu!");
-            doDelete();
+            //doDelete();
         }
     }
 
@@ -119,7 +141,13 @@ public class CarBuyerAgent extends Agent {
                             int budget = Integer.parseInt((String) args[2]) - bestPrice;
                             args[2] = Integer.toString(budget);
                             System.out.println("Budżet " + getAID().getName() + " wynosi teraz: " + args[2]);
-                            myAgent.doDelete();
+
+                            if(CarBuyerAgent.allCars.get(getAID().getLocalName()) <= 0 || budget <= 0){
+                                wantedCarsBuyer.remove(carIndex);
+                                allCars.computeIfPresent(getAID().getLocalName(), (k, cars) -> cars - 1);
+                                doDelete();
+                            }
+
                         } else {
                             System.out.println("Nieudana próba kupna: wybrany samochód jest już sprzedany.");
                         }
