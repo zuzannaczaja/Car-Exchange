@@ -8,15 +8,14 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-import java.util.HashMap;
 import java.util.Hashtable;
 
 public class CarSellerAgentNoGui extends Agent {
 
-    private Hashtable catalogue;
+    private Hashtable carCatalogue;
 
     protected void setup() {
-        catalogue = new Hashtable();
+        carCatalogue = new Hashtable();
 
         Object[] args = getArguments();
 
@@ -91,7 +90,7 @@ public class CarSellerAgentNoGui extends Agent {
             if (aclMessage != null) {
                 String content = aclMessage.getContent();
                 ACLMessage reply = aclMessage.createReply();
-                Car car = (Car) catalogue.get(content);
+                Car car = (Car) carCatalogue.get(content);
                 Integer price = null;
                 if (car != null) {
                     price = car.getTotalPrice();
@@ -117,21 +116,26 @@ public class CarSellerAgentNoGui extends Agent {
             if (aclMessage != null) {
                 String content = aclMessage.getContent();
                 ACLMessage reply = aclMessage.createReply();
-                Car car = (Car) catalogue.get(content);
+                Car car = (Car) carCatalogue.get(content);
                 Integer price = null;
                 if (car != null) {
 
                     price = car.getTotalPrice();
                 }
-                catalogue.remove(content);
+                carCatalogue.remove(content);
                 if (price != null) {
                     reply.setPerformative(ACLMessage.INFORM);
                     System.out.println(content + " sprzedany agentowi " + aclMessage.getSender().getName());
                 } else {
-                    // The requested book has been sold to another buyer in the meanwhile .
                     reply.setPerformative(ACLMessage.FAILURE);
                     reply.setContent("not-available");
                 }
+
+                if(carCatalogue.isEmpty()){
+                    doDelete();
+                    System.out.println(getAID().getName() + " jest usuwany, bo sprzedał wszystkie auta.");
+                }
+
                 myAgent.send(reply);
             } else {
                 block();
@@ -144,7 +148,7 @@ public class CarSellerAgentNoGui extends Agent {
             private static final long serialVersionUID = 1L;
 
             public void action() {
-                catalogue.put(brandAndModel, car);
+                carCatalogue.put(brandAndModel, car);
                 System.out.println(brandAndModel + " został dodany do katalogu. Cena = " + car.getTotalPrice());
             }
         };

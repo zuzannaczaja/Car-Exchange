@@ -12,7 +12,7 @@ import java.util.*;
 
 public class CarSellerAgent extends Agent {
 
-    private Hashtable carCatalogue;
+    public Hashtable carCatalogue;
     private CarSellerGui myGui;
 
     protected void setup() {
@@ -35,6 +35,7 @@ public class CarSellerAgent extends Agent {
 
         addBehaviour(new OfferRequestsServer());
         addBehaviour(new PurchaseOrdersServer());
+
     }
 
     protected void takeDown() {
@@ -106,6 +107,12 @@ public class CarSellerAgent extends Agent {
                     reply.setPerformative(ACLMessage.FAILURE);
                     reply.setContent("not-available");
                 }
+
+                if(carCatalogue.isEmpty()){
+                    doDelete();
+                    System.out.println(getAID().getName() + " jest usuwany, bo sprzedał wszystkie auta.");
+                }
+
                 myAgent.send(reply);
             }
             else {

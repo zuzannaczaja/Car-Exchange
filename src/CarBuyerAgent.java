@@ -12,6 +12,7 @@ import jade.lang.acl.MessageTemplate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class CarBuyerAgent extends Agent {
 
@@ -29,26 +30,21 @@ public class CarBuyerAgent extends Agent {
         Object[] args = getArguments();
         if (args != null && args.length > 0) {
 
-            int counter = 1;
-
             for(Object car : args){
                 String carName = car.toString().trim();
-
-                System.out.println(" > " + counter + ".) " + carName);
                 wantedCarsBuyer.add(carName);
-                counter++;
-
             }
 
             allCars.put(getAID().getLocalName(), wantedCarsBuyer.size());
 
-            carIndex = CarBuyerAgent.allCars.get(getAID().getLocalName()) - 1;
-
-            targetCar = wantedCarsBuyer.get(carIndex);
-            System.out.println("Poszukiwany samochód to: " + targetCar);
-
             addBehaviour(new TickerBehaviour(this, 10000) {
                 protected void onTick() {
+                    Random random = new Random();
+
+                    carIndex = random.nextInt(CarBuyerAgent.allCars.get(getAID().getLocalName()) - 1);;
+                    targetCar = wantedCarsBuyer.get(carIndex);
+                    System.out.println("Poszukiwany samochód to: " + targetCar);
+
                     System.out.println("Podejmuję próbę kupna " + targetCar);
                     DFAgentDescription dfAgentDescription = new DFAgentDescription();
                     ServiceDescription serviceDescription = new ServiceDescription();
@@ -56,12 +52,12 @@ public class CarBuyerAgent extends Agent {
                     dfAgentDescription.addServices(serviceDescription);
                     try {
                         DFAgentDescription[] result = DFService.search(myAgent, dfAgentDescription);
-                        System.out.println("Wykryto następujących sprzedających:");
+                        /*System.out.println("Wykryto następujących sprzedających:");
                         sellerAgents = new AID[result.length];
                         for (int i = 0; i < result.length; ++i) {
                             sellerAgents[i] = result[i].getName();
                             //System.out.println(sellerAgents[i].getName());
-                        }
+                        }*/
                     } catch (FIPAException fe) {
                         fe.printStackTrace();
                     }
@@ -84,7 +80,6 @@ public class CarBuyerAgent extends Agent {
         private int repliesCount = 0;
         private MessageTemplate messageTemplate;
         private int step = 0;
-        Object[] args = getArguments();
 
         public void action() {
             switch (step) {
@@ -111,7 +106,6 @@ public class CarBuyerAgent extends Agent {
                                 bestSeller = reply.getSender();
                             }
                             if (price > budgetBuyer) {
-                                System.out.println(price + "   " + budgetBuyer);
                                 System.out.println("Nieudana próba kupna: Budżet kupującego jest zbyt niski.");
                             }
                         }
@@ -143,11 +137,18 @@ public class CarBuyerAgent extends Agent {
                             budgetBuyer  = budgetBuyer - bestPrice;
                             System.out.println("Budżet " + getAID().getName() + " wynosi teraz: " + budgetBuyer);
 
-                            if(CarBuyerAgent.allCars.get(getAID().getLocalName()) <= 0 || budgetBuyer <= 0){
-                                wantedCarsBuyer.remove(carIndex);
-                                allCars.computeIfPresent(getAID().getLocalName(), (k, cars) -> cars - 1);
+                            if(budgetBuyer <= 0){
                                 doDelete();
+                                System.out.println(getAID().getName() + " jest usuwany, bo jego budżet jest równy 0.");
                             }
+
+                            if(CarBuyerAgent.allCars.get(getAID().getLocalName()) <= 0){
+                                doDelete();
+                                System.out.println(getAID().getName() + " jest usuwany, bo kupił wszystkie samochody.");
+                            }
+
+                            wantedCarsBuyer.remove(carIndex);
+                            allCars.computeIfPresent(getAID().getLocalName(), (k, cars) -> cars - 1);
 
                         } else {
                             System.out.println("Nieudana próba kupna: wybrany samochód jest już sprzedany.");
