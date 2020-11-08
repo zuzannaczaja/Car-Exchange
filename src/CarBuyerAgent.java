@@ -52,12 +52,12 @@ public class CarBuyerAgent extends Agent {
                     dfAgentDescription.addServices(serviceDescription);
                     try {
                         DFAgentDescription[] result = DFService.search(myAgent, dfAgentDescription);
-                        /*System.out.println("Wykryto następujących sprzedających:");
+                        //System.out.println("Wykryto następujących sprzedających:");
                         sellerAgents = new AID[result.length];
                         for (int i = 0; i < result.length; ++i) {
                             sellerAgents[i] = result[i].getName();
                             //System.out.println(sellerAgents[i].getName());
-                        }*/
+                        }
                     } catch (FIPAException fe) {
                         fe.printStackTrace();
                     }
@@ -118,7 +118,14 @@ public class CarBuyerAgent extends Agent {
                     }
                     break;
                 case 2:
+                    Random random = new Random();
+                    boolean isDelayed = random.nextBoolean();
                     ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
+                    if(isDelayed){
+                        System.out.println(getAID().getLocalName() + " prosi o rezerwację samochodu.");
+                        order = new ACLMessage(ACLMessage.UNKNOWN);
+                    }
+                    //ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
                     order.addReceiver(bestSeller);
                     order.setContent(targetCar);
                     order.setConversationId("car-trade");
