@@ -53,19 +53,21 @@ public class StartCarExchange extends Agent {
         StringBuilder agentList = new StringBuilder();
         System.out.println("SELLERS: ");
         for (int i = 0; i < SELLERS_COUNT; i++) {
+            agentList.append(SELLER_NAME);
+            agentList.append(i + 1);
+            agentList.append(SELLER_PACKGAE + "(");
             for (int y = 0; y < SELLERS_CARS; y++) {
-                agentList.append(SELLER_NAME);
-                agentList.append(i + 1);
-                agentList.append(SELLER_PACKGAE + "(");
-                agentList.append(generateCars(carList));
-                agentList.append(generateCars(bodyTypeList));
-                agentList.append(generateCars(engineTypeList));
-                agentList.append(generateRandomFloat(ENGINE_CAPACITY_MIN, ENGINE_CAPACITY_MAX));
-                agentList.append(generateRandomInt(YEAR_OF_PRODUCTION_MIN, YEAR_OF_PRODUCTION_MAX, true));
-                agentList.append(generateRandomInt(BASE_PRICE_MIN, BASE_PRICE_MAX, true));
-                agentList.append(generateRandomInt(ADDITIONAL_COSTS_MIN, ADDITIONAL_COSTS_MAX, false));
-                agentList.append(");");
+                agentList.append(generateCars(carList) + "-");
+                agentList.append(generateCars(bodyTypeList) + "-");
+                agentList.append(generateCars(engineTypeList) + "-");
+                agentList.append(generateRandomFloat(ENGINE_CAPACITY_MIN, ENGINE_CAPACITY_MAX) + "-");
+                agentList.append(generateRandomInt(YEAR_OF_PRODUCTION_MIN, YEAR_OF_PRODUCTION_MAX) + "-");
+                agentList.append(generateRandomInt(BASE_PRICE_MIN, BASE_PRICE_MAX) + "-");
+                agentList.append(generateRandomInt(ADDITIONAL_COSTS_MIN, ADDITIONAL_COSTS_MAX));
+                if(y + 1 != SELLERS_CARS)
+                    agentList.append(",");
             }
+            agentList.append(");");
         }
         String temp = String.valueOf(agentList);
         System.out.println(temp.replace(";", "\n"));
@@ -80,7 +82,7 @@ public class StartCarExchange extends Agent {
             agentList.append(i + 1);
             agentList.append(BUYER_PACKGAE + "(");
             for (int y = 0; y < BUYERS_CARS; y++) {
-                agentList.append(generateCarsTest(carList));
+                agentList.append(generateCars(carList));
                 //agentList.append(100000);
                 if(y + 1 != BUYERS_CARS)
                     agentList.append(",");
@@ -109,17 +111,6 @@ public class StartCarExchange extends Agent {
         int id = r.nextInt(list.length);
         if (list[id].contains("|")) {
             System.out.println(list[id]);
-            return list[id].replace("|", ", ") + ", ";
-        }
-        else
-            return list[id] + ", ";
-    }
-
-    private static String generateCarsTest(String[] list) {
-        Random r = new Random();
-        int id = r.nextInt(list.length);
-        if (list[id].contains("|")) {
-            System.out.println(list[id]);
             return list[id].replace("|", " ");
         }
         else
@@ -131,15 +122,12 @@ public class StartCarExchange extends Agent {
         float randomFloat = min + r.nextFloat() * (max - min);
         int scale = (int) Math.pow(10, 1);
         float roundedFloat = ((float) Math.round(randomFloat * scale) / scale);
-        return roundedFloat + ", ";
+        return String.valueOf(roundedFloat);
     }
 
-    private static String generateRandomInt(int min, int max, boolean coma) {
+    private static String generateRandomInt(int min, int max) {
         Random r = new Random();
         int randomInt = r.nextInt(max - min + 1) + min;
-        if (coma)
-            return randomInt + ", ";
-        else
-            return String.valueOf(randomInt);
+        return String.valueOf(randomInt);
     }
 }
