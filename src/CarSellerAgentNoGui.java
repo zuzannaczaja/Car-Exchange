@@ -154,7 +154,7 @@ public class CarSellerAgentNoGui extends Agent {
                 System.out.println("Rozpoczynam rezerwację samochodu.");
                 try {
                     System.out.println("CZEKAM");
-                    Thread.sleep(10000);
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

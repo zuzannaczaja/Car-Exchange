@@ -34,7 +34,7 @@ public class CarBuyerAgent extends Agent {
 
             allCars.put(getAID().getLocalName(), wantedCarsBuyer.size());
 
-            addBehaviour(new TickerBehaviour(this, 15000) {
+            addBehaviour(new TickerBehaviour(this, 5000) {
                 protected void onTick() {
                     Random random = new Random();
 
