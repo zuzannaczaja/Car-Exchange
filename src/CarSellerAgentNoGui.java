@@ -152,10 +152,11 @@ public class CarSellerAgentNoGui extends Agent {
             ACLMessage aclMessage = myAgent.receive(messageTemplate);
             if (aclMessage != null) {
                 System.out.println("Rozpoczynam rezerwację samochodu.");
-                double mili = System.currentTimeMillis();
-                while(System.currentTimeMillis() < mili+5000){
-                    //System.out.println("CZEKAM");
-                    String opoznienie = ",";
+                try {
+                    System.out.println("CZEKAM");
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
                 System.out.println("Zakończono rezerwację samochodu, przechodzę do zakupu.");
                 String content = aclMessage.getContent();

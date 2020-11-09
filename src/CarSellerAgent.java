@@ -35,7 +35,7 @@ public class CarSellerAgent extends Agent {
 
         addBehaviour(new OfferRequestsServer());
         addBehaviour(new PurchaseOrdersServer());
-
+        addBehaviour(new DelayedPurchaseOrdersServer());
     }
 
     protected void takeDown() {
@@ -116,6 +116,49 @@ public class CarSellerAgent extends Agent {
                 myAgent.send(reply);
             }
             else {
+                block();
+            }
+        }
+    }
+
+    private class DelayedPurchaseOrdersServer extends CyclicBehaviour {
+        public void action() {
+
+            MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(ACLMessage.UNKNOWN);
+            ACLMessage aclMessage = myAgent.receive(messageTemplate);
+            if (aclMessage != null) {
+                System.out.println("Rozpoczynam rezerwację samochodu.");
+                try {
+                    System.out.println("CZEKAM");
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("Zakończono rezerwację samochodu, przechodzę do zakupu.");
+                String content = aclMessage.getContent();
+                ACLMessage reply = aclMessage.createReply();
+                Car car = (Car) carCatalogue.get(content);
+                Integer price = null;
+                if (car != null) {
+
+                    price = car.getTotalPrice();
+                }
+                carCatalogue.remove(content);
+                if (price != null) {
+                    reply.setPerformative(ACLMessage.INFORM);
+                    System.out.println(content + " sprzedany agentowi " + aclMessage.getSender().getName());
+                } else {
+                    reply.setPerformative(ACLMessage.FAILURE);
+                    reply.setContent("not-available");
+                }
+
+                if(carCatalogue.isEmpty()){
+                    doDelete();
+                    System.out.println(getAID().getName() + " jest usuwany, bo sprzedał wszystkie auta.");
+                }
+
+                myAgent.send(reply);
+            } else {
                 block();
             }
         }
