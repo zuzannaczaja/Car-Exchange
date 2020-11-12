@@ -1,15 +1,15 @@
-import java.time.ZonedDateTime;
-
 public class Reservation {
 
     String buyerName;
     Car car;
-    long endTime;
+    long timeOfReservation;
+    long howLongNeedsToBeReserved;
 
-    public Reservation(String buyerName, Car car, long endTime) {
+    public Reservation(String buyerName, Car car, long timeOfReservation, long howLongNeedsToBeReserved) {
         this.buyerName = buyerName;
         this.car = car;
-        this.endTime = endTime;
+        this.timeOfReservation = timeOfReservation;
+        this.howLongNeedsToBeReserved = howLongNeedsToBeReserved;
     }
 
     public String getBuyerName() {
@@ -20,8 +20,12 @@ public class Reservation {
         return car;
     }
 
-    public long getEndTime() {
-        return endTime;
+    public long getTimeOfReservation() {
+        return timeOfReservation;
+    }
+
+    public long getHowLongNeedsToBeReserved() {
+        return howLongNeedsToBeReserved;
     }
 
     public void setBuyerName(String buyerName) {
@@ -32,7 +36,11 @@ public class Reservation {
         this.car = car;
     }
 
-    public void setEndTime(long endTime) {
-        this.endTime = endTime;
+    public void setTimeOfReservation(long timeOfReservation) {
+        this.timeOfReservation = timeOfReservation;
+    }
+
+    public void setHowLongNeedsToBeReserved(long howLongNeedsToBeReserved) {
+        this.howLongNeedsToBeReserved = howLongNeedsToBeReserved;
     }
 }

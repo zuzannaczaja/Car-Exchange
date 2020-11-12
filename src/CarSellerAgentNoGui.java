@@ -1,7 +1,6 @@
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
-import jade.core.behaviours.WakerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
@@ -10,10 +9,13 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
 import java.util.Hashtable;
+import java.util.Random;
 
 public class CarSellerAgentNoGui extends Agent {
 
     private Hashtable carCatalogue;
+    private Hashtable reservationList;
+    Reservation reservation;
 
     protected void setup() {
         carCatalogue = new Hashtable();
@@ -81,6 +83,14 @@ public class CarSellerAgentNoGui extends Agent {
         addBehaviour(new OneShotBehaviour() {
             public void action() {
                 addBehaviour(createSellingCarBehaviour(brandAndModel, car));
+            }
+        });
+    }
+
+    public void updateReservationList(final String brandAndModel, final Reservation reservation) {
+        addBehaviour(new OneShotBehaviour() {
+            public void action() {
+                addBehaviour(createReservationBehaviour(brandAndModel, reservation));
             }
         });
     }
@@ -160,11 +170,39 @@ public class CarSellerAgentNoGui extends Agent {
                     e.printStackTrace();
                 }
                 System.out.println("Zakończono rezerwację samochodu, przechodzę do zakupu.");*/
-
                 String content = aclMessage.getContent();
                 ACLMessage reply = aclMessage.createReply();
                 Car car = (Car) carCatalogue.get(content);
-                Reservation reservation = new Reservation(aclMessage.getSender().getLocalName(), car, 10000);
+                Reservation reservation = (Reservation) reservationList.get(content);
+                CarBuyerAgentNoGui carBuyerAgentNoGui = new CarBuyerAgentNoGui();
+                //Reservation reservation = new Reservation(aclMessage.getSender().getLocalName(), car, System.currentTimeMillis());
+
+                Random random = new Random();
+                //int randomInt = random.nextInt(20000 - 0 + 1) + 0;
+
+                //sprawdzamy czy istnieje samochód i posiada rezerwację
+                if (carCatalogue.contains(reservation.getCar().getBrand() + " " + reservation.getCar().getModel()) && reservation != null){
+                    if(reservation.getTimeOfReservation() + reservation.getHowLongNeedsToBeReserved() >= System.currentTimeMillis()
+                            && reservation.getBuyerName().equals(aclMessage.getSender().getLocalName())){
+                        //koniec rezerwacji i zakup
+                    } else {
+                        //rezerwacja istnieje, ale nie dobiegła końca
+                    }
+                } else if (reservation == null){
+                    //istnieje samochód, ale nie posiada rezerwacji
+                    //losujemy czy ma podlegac rezerwacji
+
+                    //jezeli tak to losujemy czas rezerwacji i tworzymy jeo obiekt
+                    if(carBuyerAgentNoGui.isDelayed){
+                        int randomTimeOfReservation = random.nextInt(20000 + 1);
+                        reservation = new Reservation(aclMessage.getSender().getLocalName(), car, System.currentTimeMillis(), randomTimeOfReservation);
+                        updateReservationList(aclMessage.getSender().getLocalName(), reservation);
+                    } else if (!carBuyerAgentNoGui.isDelayed){
+                        //nie musi być rezerwowany więc pozwalamy go kupić od razu
+                    }
+                } else {
+                    //nie ma takiego samochodu w katalogu
+                }
 
                 Integer price = null;
                 if (car != null) {
@@ -200,6 +238,19 @@ public class CarSellerAgentNoGui extends Agent {
             public void action() {
                 carCatalogue.put(brandAndModel, car);
                 System.out.println(brandAndModel + " został dodany do katalogu. Cena = " + car.getTotalPrice());
+            }
+        };
+    }
+
+    private OneShotBehaviour createReservationBehaviour(final String brandAndModel, final Reservation reservation) {
+        return new OneShotBehaviour() {
+            private static final long serialVersionUID = 1L;
+
+            public void action() {
+                reservationList.put(brandAndModel, reservation);
+                System.out.println("> Rezerwacja kupującego: " + brandAndModel
+                        + " została dodana do listy rezerwacji. Zarezerwowany samochód: "
+                        + reservation.getCar().getBrand() + " " + reservation.getCar().getModel());
             }
         };
     }

@@ -56,7 +56,6 @@ public class Car {
         return (additionalCosts + basePrice);
     }
 
-
     public void setBrand(String brand) {
         this.brand = brand;
     }

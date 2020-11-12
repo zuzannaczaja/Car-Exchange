@@ -22,6 +22,7 @@ public class CarBuyerAgentNoGui extends Agent {
     private List<String> wantedCarsBuyer = new ArrayList<>();
     int carIndex;
     int budgetBuyer = 100000;
+    public boolean isDelayed;
 
     protected void setup() {
 
@@ -124,11 +125,11 @@ public class CarBuyerAgentNoGui extends Agent {
                     break;
                 case 2:
                     Random random = new Random();
-                    boolean isDelayed = random.nextBoolean();
+                    isDelayed = random.nextBoolean();
                     ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
                     if(isDelayed){
                         System.out.println(getAID().getLocalName() + " prosi o rezerwację samochodu.");
-                        order = new ACLMessage(ACLMessage.UNKNOWN);
+                        //order = new ACLMessage(ACLMessage.UNKNOWN);
                     }
                     //ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
                     order.addReceiver(bestSeller);

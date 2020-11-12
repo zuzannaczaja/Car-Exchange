@@ -23,7 +23,7 @@ public class CarBuyerAgent extends Agent {
     int carIndex;
     int budgetBuyer = 100000;
     private CarBuyerGui myGui;
-    public boolean isDelayed = true;
+    public boolean isDelayed;
 
     protected void setup() {
 
@@ -82,9 +82,9 @@ public class CarBuyerAgent extends Agent {
         System.out.println(allCars.get(getAID().getLocalName()));
 
 
-        if(reservation == "yes" || reservation == "Yes"){
+        if(reservation.equals("yes") || reservation.equals("Yes")){
             isDelayed = true;
-        } else if(reservation == "no" || reservation == "No"){
+        } else if(reservation.equals("no") || reservation.equals("No")){
             isDelayed = false;
         }
 
