@@ -134,7 +134,6 @@ public class CarBuyerAgent extends Agent {
                     }
                     break;
                 case 2:
-                    Random random = new Random();
 
                     ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
                     if(isDelayed){

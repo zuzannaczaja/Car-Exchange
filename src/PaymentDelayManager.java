@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PaymentDelayManager {
-    private List<PaymentDelay> paymentDelays = new ArrayList<>();
+    private List<Reservation> paymentDelays = new ArrayList<>();
 
     public synchronized boolean isPaymentDelayed(final String buyerName, final Car car) {
         return paymentDelays.stream().anyMatch(

@@ -150,24 +150,29 @@ public class CarSellerAgentNoGui extends Agent {
 
             MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(ACLMessage.UNKNOWN);
             ACLMessage aclMessage = myAgent.receive(messageTemplate);
+
             if (aclMessage != null) {
-                System.out.println("Rozpoczynam rezerwację samochodu.");
+                /*System.out.println("Rozpoczynam rezerwację samochodu.");
                 try {
                     System.out.println("CZEKAM");
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                System.out.println("Zakończono rezerwację samochodu, przechodzę do zakupu.");
+                System.out.println("Zakończono rezerwację samochodu, przechodzę do zakupu.");*/
+
                 String content = aclMessage.getContent();
                 ACLMessage reply = aclMessage.createReply();
                 Car car = (Car) carCatalogue.get(content);
+                Reservation reservation = new Reservation(aclMessage.getSender().getLocalName(), car, 10000);
+
                 Integer price = null;
                 if (car != null) {
 
                     price = car.getTotalPrice();
                 }
                 carCatalogue.remove(content);
+
                 if (price != null) {
                     reply.setPerformative(ACLMessage.INFORM);
                     System.out.println(content + " sprzedany agentowi " + aclMessage.getSender().getName());

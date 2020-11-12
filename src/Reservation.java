@@ -1,11 +1,12 @@
 import java.time.ZonedDateTime;
 
-public class PaymentDelay {
+public class Reservation {
+
     String buyerName;
     Car car;
-    ZonedDateTime endTime;
+    long endTime;
 
-    public PaymentDelay(String buyerName, Car car, ZonedDateTime endTime) {
+    public Reservation(String buyerName, Car car, long endTime) {
         this.buyerName = buyerName;
         this.car = car;
         this.endTime = endTime;
@@ -19,7 +20,7 @@ public class PaymentDelay {
         return car;
     }
 
-    public ZonedDateTime getEndTime() {
+    public long getEndTime() {
         return endTime;
     }
 
@@ -31,7 +32,7 @@ public class PaymentDelay {
         this.car = car;
     }
 
-    public void setEndTime(ZonedDateTime endTime) {
+    public void setEndTime(long endTime) {
         this.endTime = endTime;
     }
 }
