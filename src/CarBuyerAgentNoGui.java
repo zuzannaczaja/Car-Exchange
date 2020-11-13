@@ -72,7 +72,6 @@ public class CarBuyerAgentNoGui extends Agent {
             });
         } else {
             System.out.println("Agent kupujący nie ma określonego samochodu!");
-            //doDelete();
         }
     }
 
@@ -110,10 +109,7 @@ public class CarBuyerAgentNoGui extends Agent {
                             if ((bestSeller == null || price < bestPrice) && price <= budgetBuyer) {
                                 bestPrice = price;
                                 bestSeller = reply.getSender();
-                            }
-                            if (price > budgetBuyer) {
-                                System.out.println("Nieudana próba kupna: Budżet kupującego jest zbyt niski.");
-                            }
+                            } 
                         }
                         repliesCount++;
                         if (repliesCount >= sellerAgents.length) {
@@ -126,14 +122,11 @@ public class CarBuyerAgentNoGui extends Agent {
                 case 2:
                     Random random = new Random();
                     isDelayed = random.nextBoolean();
+
                     ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
-                    if(isDelayed){
-                        System.out.println(getAID().getLocalName() + " prosi o rezerwację samochodu.");
-                        //order = new ACLMessage(ACLMessage.UNKNOWN);
-                    }
-                    //ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
+
                     order.addReceiver(bestSeller);
-                    order.setContent(targetCar);
+                    order.setContent(targetCar + "," + isDelayed);
                     order.setConversationId("car-trade");
                     order.setReplyWith("order" + System.currentTimeMillis());
                     myAgent.send(order);
@@ -164,7 +157,7 @@ public class CarBuyerAgentNoGui extends Agent {
                             }
 
                         } else {
-                            System.out.println("Nieudana próba kupna: wybrany samochód jest już sprzedany.");
+                           // System.out.println("Nieudana próba kupna: wybrany samochód jest już sprzedany.");
                         }
                         step = 4;
                     } else {

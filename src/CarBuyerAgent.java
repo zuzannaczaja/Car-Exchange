@@ -136,11 +136,7 @@ public class CarBuyerAgent extends Agent {
                 case 2:
 
                     ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
-                    if(isDelayed){
-                        System.out.println(getAID().getLocalName() + " prosi o rezerwację samochodu.");
-                        order = new ACLMessage(ACLMessage.UNKNOWN);
-                    }
-                    //ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
+
                     order.addReceiver(bestSeller);
                     order.setContent(targetCar);
                     order.setConversationId("car-trade");
@@ -173,7 +169,7 @@ public class CarBuyerAgent extends Agent {
                             }
 
                         } else {
-                            System.out.println("Nieudana próba kupna: wybrany samochód jest już sprzedany.");
+                           // System.out.println("Nieudana próba kupna: wybrany samochód jest już sprzedany.");
                         }
                         step = 4;
                     } else {

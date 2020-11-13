@@ -1,3 +1,4 @@
+import jade.Boot;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
@@ -15,10 +16,10 @@ public class CarSellerAgentNoGui extends Agent {
 
     private Hashtable carCatalogue;
     private Hashtable reservationList;
-    Reservation reservation;
 
     protected void setup() {
         carCatalogue = new Hashtable();
+        reservationList = new Hashtable();
 
         Object[] args = getArguments();
 
@@ -47,7 +48,11 @@ public class CarSellerAgentNoGui extends Agent {
                 Car car = new Car(brand, model, bodyType, engineType, engineCapacity, yearOfProduction, basePrice, additionalCosts);
                 String brandAndModel = s[0] + " " + s[1];
                 updateCatalogue(brandAndModel, car);
+                Reservation reservation = new Reservation(null,null,0,0);
+                updateReservationList(brandAndModel, reservation);
             }
+
+
         }
 
         DFAgentDescription dfd = new DFAgentDescription();
@@ -64,7 +69,6 @@ public class CarSellerAgentNoGui extends Agent {
 
         addBehaviour(new OfferRequestsServer());
         addBehaviour(new PurchaseOrdersServer());
-        addBehaviour(new DelayedPurchaseOrdersServer());
     }
 
     protected void takeDown() {
@@ -125,100 +129,94 @@ public class CarSellerAgentNoGui extends Agent {
         public void action() {
             MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL);
             ACLMessage aclMessage = myAgent.receive(messageTemplate);
-            if (aclMessage != null) {
-                String content = aclMessage.getContent();
-                ACLMessage reply = aclMessage.createReply();
-                Car car = (Car) carCatalogue.get(content);
-                Integer price = null;
-                if (car != null) {
-
-                    price = car.getTotalPrice();
-                }
-                carCatalogue.remove(content);
-                if (price != null) {
-                    reply.setPerformative(ACLMessage.INFORM);
-                    System.out.println(content + " sprzedany agentowi " + aclMessage.getSender().getName());
-                } else {
-                    reply.setPerformative(ACLMessage.FAILURE);
-                    reply.setContent("not-available");
-                }
-
-                if(carCatalogue.isEmpty()){
-                    doDelete();
-                    System.out.println(getAID().getName() + " jest usuwany, bo sprzedał wszystkie auta.");
-                }
-
-                myAgent.send(reply);
-            } else {
-                block();
-            }
-        }
-    }
-
-    private class DelayedPurchaseOrdersServer extends CyclicBehaviour {
-        public void action() {
-
-            MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(ACLMessage.UNKNOWN);
-            ACLMessage aclMessage = myAgent.receive(messageTemplate);
 
             if (aclMessage != null) {
-                /*System.out.println("Rozpoczynam rezerwację samochodu.");
-                try {
-                    System.out.println("CZEKAM");
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("Zakończono rezerwację samochodu, przechodzę do zakupu.");*/
+
                 String content = aclMessage.getContent();
+                String[] parts = content.split(",");
+
+                content = parts[0];
+                String isDelayedString = parts[1];
+                boolean isDelayedBoolean = Boolean.parseBoolean(isDelayedString);
+
                 ACLMessage reply = aclMessage.createReply();
                 Car car = (Car) carCatalogue.get(content);
                 Reservation reservation = (Reservation) reservationList.get(content);
-                CarBuyerAgentNoGui carBuyerAgentNoGui = new CarBuyerAgentNoGui();
-                //Reservation reservation = new Reservation(aclMessage.getSender().getLocalName(), car, System.currentTimeMillis());
 
                 Random random = new Random();
-                //int randomInt = random.nextInt(20000 - 0 + 1) + 0;
+                Integer price = null;
+                String buyerName = aclMessage.getSender().getLocalName();
 
                 //sprawdzamy czy istnieje samochód i posiada rezerwację
-                if (carCatalogue.contains(reservation.getCar().getBrand() + " " + reservation.getCar().getModel()) && reservation != null){
-                    if(reservation.getTimeOfReservation() + reservation.getHowLongNeedsToBeReserved() >= System.currentTimeMillis()
-                            && reservation.getBuyerName().equals(aclMessage.getSender().getLocalName())){
+                if (reservation.getBuyerName() != null){
+
+                    if(reservation.getTimeOfReservation() + reservation.getHowLongNeedsToBeReserved() <= System.currentTimeMillis()
+                    && buyerName.equals(reservation.getBuyerName())){
                         //koniec rezerwacji i zakup
+
+                        System.out.println("Koniec rezerwacji u " + getAID().getLocalName() + " przez " + aclMessage.getSender().getLocalName() + "!");
+
+                        if (car != null) {
+
+                            price = car.getTotalPrice();
+                        }
+                        carCatalogue.remove(content);
+                        reservationList.remove(content);
+
+                        if (price != null) {
+                            reply.setPerformative(ACLMessage.INFORM);
+                            System.out.println(content + " sprzedany agentowi " + aclMessage.getSender().getName());
+                        } else {
+                            reply.setPerformative(ACLMessage.FAILURE);
+                            reply.setContent("not-available");
+                        }
+
                     } else {
                         //rezerwacja istnieje, ale nie dobiegła końca
+
+                        if (price != null) {
+                            reply.setPerformative(ACLMessage.FAILURE);
+                            reply.setContent("not-available");
+                            System.out.println("Nieudana próba kupna: rezerwacja samochodu nadal trwa.");
+                        }
+
                     }
-                } else if (reservation == null){
+                } else if (reservation.getBuyerName() == null){
                     //istnieje samochód, ale nie posiada rezerwacji
                     //losujemy czy ma podlegac rezerwacji
 
-                    //jezeli tak to losujemy czas rezerwacji i tworzymy jeo obiekt
-                    if(carBuyerAgentNoGui.isDelayed){
+                    //jezeli tak to losujemy czas rezerwacji i tworzymy jego obiekt
+                    if(isDelayedBoolean){
                         int randomTimeOfReservation = random.nextInt(20000 + 1);
-                        reservation = new Reservation(aclMessage.getSender().getLocalName(), car, System.currentTimeMillis(), randomTimeOfReservation);
-                        updateReservationList(aclMessage.getSender().getLocalName(), reservation);
-                    } else if (!carBuyerAgentNoGui.isDelayed){
+                        reservation.setBuyerName(aclMessage.getSender().getLocalName());
+                        reservation.setCar(car);
+                        reservation.setTimeOfReservation(System.currentTimeMillis());
+                        reservation.setHowLongNeedsToBeReserved(randomTimeOfReservation);
+
+                        System.out.println("Zarezerwowano samochód u "  + getAID().getLocalName() + " przez " + aclMessage.getSender().getLocalName() + "!");
+
+                    } else if (!isDelayedBoolean){
                         //nie musi być rezerwowany więc pozwalamy go kupić od razu
+
+                        if (car != null) {
+
+                            price = car.getTotalPrice();
+                        }
+                        carCatalogue.remove(content);
+
+                        if (price != null) {
+                            reply.setPerformative(ACLMessage.INFORM);
+                            System.out.println(content + " sprzedany agentowi " + aclMessage.getSender().getName());
+                        } else {
+                            reply.setPerformative(ACLMessage.FAILURE);
+                            reply.setContent("not-available");
+                            System.out.println("Nieudana próba kupna: wybrany samochód nie jest dostępny.");
+                        }
                     }
                 } else {
                     //nie ma takiego samochodu w katalogu
                 }
 
-                Integer price = null;
-                if (car != null) {
-
-                    price = car.getTotalPrice();
-                }
-                carCatalogue.remove(content);
-
-                if (price != null) {
-                    reply.setPerformative(ACLMessage.INFORM);
-                    System.out.println(content + " sprzedany agentowi " + aclMessage.getSender().getName());
-                } else {
-                    reply.setPerformative(ACLMessage.FAILURE);
-                    reply.setContent("not-available");
-                }
-
                 if(carCatalogue.isEmpty()){
                     doDelete();
                     System.out.println(getAID().getName() + " jest usuwany, bo sprzedał wszystkie auta.");
@@ -230,6 +228,7 @@ public class CarSellerAgentNoGui extends Agent {
             }
         }
     }
+
 
     private OneShotBehaviour createSellingCarBehaviour(final String brandAndModel, final Car car) {
         return new OneShotBehaviour() {
@@ -248,9 +247,9 @@ public class CarSellerAgentNoGui extends Agent {
 
             public void action() {
                 reservationList.put(brandAndModel, reservation);
-                System.out.println("> Rezerwacja kupującego: " + brandAndModel
+               /* System.out.println("> Rezerwacja kupującego: " + brandAndModel
                         + " została dodana do listy rezerwacji. Zarezerwowany samochód: "
-                        + reservation.getCar().getBrand() + " " + reservation.getCar().getModel());
+                        + reservation.getCar().getBrand() + " " + reservation.getCar().getModel());*/
             }
         };
     }
