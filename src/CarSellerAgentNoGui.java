@@ -51,8 +51,6 @@ public class CarSellerAgentNoGui extends Agent {
                 Reservation reservation = new Reservation(null,null,0,0);
                 updateReservationList(brandAndModel, reservation);
             }
-
-
         }
 
         DFAgentDescription dfd = new DFAgentDescription();

@@ -65,6 +65,8 @@ class CarSellerGui extends JFrame {
                     Car car = new Car(brand, model, bodyType, engineType, Integer.parseInt(engineCapacity), Integer.parseInt(yearsOfProduction), Integer.parseInt(basicPrice), Integer.parseInt(additionalCosts));
                     String brandAndModel = brand + " " + model;
                     myAgent.updateCatalogue(brandAndModel, car);
+                    Reservation reservation = new Reservation(null,null,0,0);
+                    myAgent.updateReservationList(brandAndModel, reservation);
                     brandField.setText("");
                     modelField.setText("");
                     bodyTypeField.setText("");

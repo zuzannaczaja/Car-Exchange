@@ -34,7 +34,7 @@ public class CarBuyerAgent extends Agent {
 
             allCars.put(getAID().getLocalName(), wantedCarsBuyer.size());
 
-            addBehaviour(new TickerBehaviour(this, 5000) {
+            addBehaviour(new TickerBehaviour(this, 15000) {
                 protected void onTick() {
                     Random random = new Random();
 
@@ -76,11 +76,7 @@ public class CarBuyerAgent extends Agent {
     public void updateData(String brandAndModel, String reservation){
 
         wantedCarsBuyer.add(brandAndModel);
-        System.out.println(wantedCarsBuyer.size());
         allCars.put(getAID().getLocalName(), wantedCarsBuyer.size());
-        System.out.println(getAID().getLocalName());
-        System.out.println(allCars.get(getAID().getLocalName()));
-
 
         if(reservation.equals("yes") || reservation.equals("Yes")){
             isDelayed = true;
@@ -134,11 +130,10 @@ public class CarBuyerAgent extends Agent {
                     }
                     break;
                 case 2:
-
                     ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
 
                     order.addReceiver(bestSeller);
-                    order.setContent(targetCar);
+                    order.setContent(targetCar + "," + isDelayed);
                     order.setConversationId("car-trade");
                     order.setReplyWith("order" + System.currentTimeMillis());
                     myAgent.send(order);

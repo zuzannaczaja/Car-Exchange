@@ -22,7 +22,7 @@ public class CarSellerAgent extends Agent {
 
         myGui = new CarSellerGui(this);
         myGui.showGui();
-
+        
         DFAgentDescription dfAgentDescription = new DFAgentDescription();
         dfAgentDescription.setName(getAID());
         ServiceDescription serviceDescription = new ServiceDescription();
