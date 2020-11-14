@@ -25,7 +25,7 @@ class CarBuyerGui extends JFrame {
         p.add(new JLabel("Model:"));
         modelField = new JTextField(15);
         p.add(modelField);
-        p.add(new JLabel("Reservation?:"));
+        p.add(new JLabel("Would you like to make a reservation (yes/no):"));
         reservationField = new JTextField(15);
         p.add(reservationField);
 
