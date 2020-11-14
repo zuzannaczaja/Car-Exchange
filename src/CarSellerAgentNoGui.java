@@ -181,9 +181,8 @@ public class CarSellerAgentNoGui extends Agent {
                     }
                 } else if (reservation.getBuyerName() == null){
                     //istnieje samochód, ale nie posiada rezerwacji
-                    //losujemy czy ma podlegac rezerwacji
 
-                    //jezeli tak to losujemy czas rezerwacji i tworzymy jego obiekt
+                    //jezeli tak to losujemy czas rezerwacji
                     if(isDelayedBoolean){
                         int randomTimeOfReservation = random.nextInt(20000 + 1);
                         reservation.setBuyerName(aclMessage.getSender().getLocalName());

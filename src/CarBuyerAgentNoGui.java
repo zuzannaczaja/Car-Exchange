@@ -157,7 +157,7 @@ public class CarBuyerAgentNoGui extends Agent {
                             }
 
                         } else {
-                           // System.out.println("Nieudana próba kupna: wybrany samochód jest już sprzedany.");
+                           //Albo samochód jest zarezerwowany albo już nie dostępny
                         }
                         step = 4;
                     } else {
